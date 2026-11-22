@@ -259,7 +259,7 @@ Ctrl & Tab::AltTab                  ; Cmd+Tab: app switcher
 ^+SC01B::Send("^{Tab}")             ; Cmd+Shift+]: next tab
 
 ^#Esc::Send("^+{Esc}")              ; Cmd+Option+Esc: Task Manager (force quit)
-^+3::Send("#{PrintScreen}")         ; Cmd+Shift+3: screenshot to Pictures\Screenshots
+^+3::Send("#+s")                    ; Cmd+Shift+3: snipping tool
 ^+4::Send("#+s")                    ; Cmd+Shift+4: snip a region
 ^+5::Send("#+s")                    ; Cmd+Shift+5: snip
 ^!q::DllCall("LockWorkStation")     ; Ctrl+Cmd+Q: lock screen (Win+L can't be sent)
