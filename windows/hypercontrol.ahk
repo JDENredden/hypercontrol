@@ -47,7 +47,7 @@ SPACE_ROLL_MS := 150   ; Space within this after right Shift -> ") "
 ; Word, +X Excel, +Y Yammer (and +O/P/T/N/D/L, which this layout doesn't use).
 ; If that happens, either import disable-office-key.reg, or change this to
 ; "^+!" (Ctrl+Shift+Alt, no Win) and bind those chords instead.
-HYPER := "^+!#"
+HYPER_CHORD := "^+!#"
 
 ; --- State ----------------------------------------------------------------------
 capsHeld   := false
@@ -275,7 +275,7 @@ Ctrl & Tab::AltTab                  ; Cmd+Tab: app switcher
 SendWithShift(keys) => Send((GetKeyState("Shift") ? "+" : "") keys)
 
 ; Send the Hyper chord plus a key.
-Hyper(key) => Send(HYPER key)
+Hyper(key) => Send(HYPER_CHORD key)
 
 ; Is the Mac Command / Option key held? (Uses the logical state, i.e. what
 ; Windows sees after the PowerToys swap.)
