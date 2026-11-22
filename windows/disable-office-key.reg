@@ -1,0 +1,9 @@
+Windows Registry Editor Version 5.00
+
+; Stops Ctrl+Shift+Alt+Win (the "Office key") from opening Office.
+; Per-user setting (HKEY_CURRENT_USER), so it doesn't need admin rights.
+; Double-click to import, then sign out and back in.
+; Undo: delete the HKEY_CURRENT_USER\Software\Classes\ms-officeapp key.
+
+[HKEY_CURRENT_USER\Software\Classes\ms-officeapp\Shell\Open\Command]
+@="rundll32"
