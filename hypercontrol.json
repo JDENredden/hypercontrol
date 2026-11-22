@@ -13,204 +13,10 @@
   "repo": null,
   "rules": [
     {
-      "description": "Hyper(Control)",
+      "description": "Caps Lock to Control (tap for Escape)",
       "manipulators": [
         {
-          "description": "Capslock + Command = Control + Command",
-          "type": "basic",
-          "from": {
-            "key_code": "caps_lock",
-            "modifiers": {
-              "mandatory": "left_command"
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_command",
-              "modifiers": [
-                "right_control"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "Capslock + Option = Control + Option",
-          "type": "basic",
-          "from": {
-            "key_code": "caps_lock",
-            "modifiers": {
-              "mandatory": "left_option"
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_option",
-              "modifiers": [
-                "right_control"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "Capslock + Shift = Control + Shift",
-          "type": "basic",
-          "from": {
-            "key_code": "caps_lock",
-            "modifiers": {
-              "mandatory": "left_shift"
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_shift",
-              "modifiers": [
-                "right_control"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "Capslock + Shift + Option = Control + Shift + Option",
-          "type": "basic",
-          "from": {
-            "key_code": "caps_lock",
-            "modifiers": {
-              "mandatory": [
-                "left_shift",
-                "left_option"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_shift",
-              "modifiers": [
-                "right_control",
-                "left_option"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "Capslock + Shift + Command = Control + Shift + Command",
-          "type": "basic",
-          "from": {
-            "key_code": "caps_lock",
-            "modifiers": {
-              "mandatory": [
-                "left_shift",
-                "left_command"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_shift",
-              "modifiers": [
-                "right_control",
-                "left_command"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "Capslock + Option + Command = Control + Option + Command",
-          "type": "basic",
-          "from": {
-            "key_code": "caps_lock",
-            "modifiers": {
-              "mandatory": [
-                "left_option",
-                "left_command"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_option",
-              "modifiers": [
-                "right_control",
-                "left_command"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "Capslock + Command = Control + Command (Reverse)",
-          "type": "basic",
-          "from": {
-            "key_code": "left_command",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_option",
-                "right_shift"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_command",
-              "modifiers": [
-                "right_control"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "Capslock + Option = Control + Command (Reverse)",
-          "type": "basic",
-          "from": {
-            "key_code": "left_option",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_option",
-                "right_shift"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_option",
-              "modifiers": [
-                "right_control"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "Capslock + Shift = Control + Command (Reverse)",
-          "type": "basic",
-          "from": {
-            "key_code": "left_shift",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_option",
-                "right_shift"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_shift",
-              "modifiers": [
-                "right_control"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "description": "CapsLock to Hyper",
-      "manipulators": [
-        {
-          "description": "capslock = esc(click) | hyper(hold)",
+          "description": "capslock = esc(click) | right control(hold)",
           "type": "basic",
           "from": {
             "key_code": "caps_lock",
@@ -222,41 +28,12 @@
           },
           "to": [
             {
-              "key_code": "right_shift",
-              "modifiers": [
-                "right_command",
-                "right_control",
-                "right_option"
-              ]
+              "key_code": "right_control"
             }
           ],
           "to_if_alone": [
             {
               "key_code": "escape"
-            }
-          ]
-        },
-        {
-          "description": "spacebar = emoji",
-          "type": "basic",
-          "from": {
-            "key_code": "spacebar",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "spacebar",
-              "modifiers": [
-                "left_control",
-                "left_command"
-              ]
             }
           ]
         }
@@ -278,10 +55,10 @@
           },
           "to": [
             {
-              "key_code": "right_shift",
+              "key_code": "left_shift",
               "modifiers": [
-                "right_control",
-                "right_option"
+                "left_control",
+                "left_option"
               ]
             }
           ],
@@ -493,146 +270,16 @@
       ]
     },
     {
-      "description": "Hyper(Control) Control Defaults",
+      "description": "Caps Layer: arrows and editing",
       "manipulators": [
         {
-          "description": "a = control-a",
-          "type": "basic",
-          "from": {
-            "key_code": "a",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "a",
-              "modifiers": [
-                "left_control"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "b = left arrow (was control-b)",
-          "type": "basic",
-          "from": {
-            "key_code": "b",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_arrow"
-            }
-          ]
-        },
-        {
-          "description": "c = control-c",
-          "type": "basic",
-          "from": {
-            "key_code": "c",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "c",
-              "modifiers": [
-                "left_control"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "d = control-d",
-          "type": "basic",
-          "from": {
-            "key_code": "d",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "d",
-              "modifiers": [
-                "left_control"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "e = control-e",
-          "type": "basic",
-          "from": {
-            "key_code": "e",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "e",
-              "modifiers": [
-                "left_control"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "f = right arrow (was control-f)",
+          "description": "caps + f = right arrow",
           "type": "basic",
           "from": {
             "key_code": "f",
             "modifiers": {
               "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
+                "right_control"
               ],
               "optional": [
                 "any"
@@ -646,228 +293,7 @@
           ]
         },
         {
-          "description": "h = backspace (was control-h)",
-          "type": "basic",
-          "from": {
-            "key_code": "h",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "delete_or_backspace"
-            }
-          ]
-        },
-        {
-          "description": "k = control-k",
-          "type": "basic",
-          "from": {
-            "key_code": "k",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "k",
-              "modifiers": [
-                "left_control"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "l = control-l",
-          "type": "basic",
-          "from": {
-            "key_code": "l",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "l",
-              "modifiers": [
-                "left_control"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "n = down arrow (was control-n)",
-          "type": "basic",
-          "from": {
-            "key_code": "n",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "down_arrow"
-            }
-          ]
-        },
-        {
-          "description": "o = control-o",
-          "type": "basic",
-          "from": {
-            "key_code": "o",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "o",
-              "modifiers": [
-                "left_control"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "p = up arrow (was control-p)",
-          "type": "basic",
-          "from": {
-            "key_code": "p",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "up_arrow"
-            }
-          ]
-        },
-        {
-          "description": "t = control-t",
-          "type": "basic",
-          "from": {
-            "key_code": "t",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "t",
-              "modifiers": [
-                "left_control"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "z = control-z",
-          "type": "basic",
-          "from": {
-            "key_code": "z",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ],
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "z",
-              "modifiers": [
-                "left_control"
-              ]
-            }
-          ]
-        },
-        {
-          "description": "caps + shift/option + f = shift/option + right arrow",
-          "type": "basic",
-          "from": {
-            "key_code": "f",
-            "modifiers": {
-              "mandatory": [
-                "right_control"
-              ],
-              "optional": [
-                "left_shift",
-                "left_option",
-                "caps_lock"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "right_arrow"
-            }
-          ]
-        },
-        {
-          "description": "caps + shift/option + b = shift/option + left arrow",
+          "description": "caps + b = left arrow",
           "type": "basic",
           "from": {
             "key_code": "b",
@@ -876,9 +302,7 @@
                 "right_control"
               ],
               "optional": [
-                "left_shift",
-                "left_option",
-                "caps_lock"
+                "any"
               ]
             }
           },
@@ -889,7 +313,7 @@
           ]
         },
         {
-          "description": "caps + shift/option + n = shift/option + down arrow",
+          "description": "caps + n = down arrow",
           "type": "basic",
           "from": {
             "key_code": "n",
@@ -898,9 +322,7 @@
                 "right_control"
               ],
               "optional": [
-                "left_shift",
-                "left_option",
-                "caps_lock"
+                "any"
               ]
             }
           },
@@ -911,7 +333,7 @@
           ]
         },
         {
-          "description": "caps + shift/option + p = shift/option + up arrow",
+          "description": "caps + p = up arrow",
           "type": "basic",
           "from": {
             "key_code": "p",
@@ -920,9 +342,7 @@
                 "right_control"
               ],
               "optional": [
-                "left_shift",
-                "left_option",
-                "caps_lock"
+                "any"
               ]
             }
           },
@@ -933,7 +353,7 @@
           ]
         },
         {
-          "description": "caps + shift/option + h = shift/option + backspace",
+          "description": "caps + h = backspace",
           "type": "basic",
           "from": {
             "key_code": "h",
@@ -942,9 +362,7 @@
                 "right_control"
               ],
               "optional": [
-                "left_shift",
-                "left_option",
-                "caps_lock"
+                "any"
               ]
             }
           },
@@ -953,23 +371,38 @@
               "key_code": "delete_or_backspace"
             }
           ]
-        }
-      ]
-    },
-    {
-      "description": "Hyper Layer",
-      "manipulators": [
+        },
         {
-          "description": "Hyper + v = Paste and Match Style",
+          "description": "caps + delete = forward delete",
+          "type": "basic",
+          "from": {
+            "key_code": "delete_or_backspace",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "delete_forward"
+            }
+          ]
+        },
+        {
+          "description": "caps + v = paste and match style",
           "type": "basic",
           "from": {
             "key_code": "v",
             "modifiers": {
               "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
               ]
             }
           },
@@ -985,36 +418,16 @@
           ]
         },
         {
-          "description": "Hyper + Delete = Forward Delete",
-          "type": "basic",
-          "from": {
-            "key_code": "delete_or_backspace",
-            "modifiers": {
-              "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "delete_forward"
-            }
-          ]
-        },
-        {
-          "description": " [ = Prev space",
+          "description": "caps + [ = previous space",
           "type": "basic",
           "from": {
             "key_code": "open_bracket",
             "modifiers": {
               "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
               ]
             }
           },
@@ -1028,16 +441,16 @@
           ]
         },
         {
-          "description": " ] = next space",
+          "description": "caps + ] = next space",
           "type": "basic",
           "from": {
             "key_code": "close_bracket",
             "modifiers": {
               "mandatory": [
-                "right_command",
-                "right_control",
-                "right_shift",
-                "right_option"
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
               ]
             }
           },
@@ -1046,6 +459,815 @@
               "key_code": "right_arrow",
               "modifiers": [
                 "left_control"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + space = emoji picker",
+          "type": "basic",
+          "from": {
+            "key_code": "spacebar",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "spacebar",
+              "modifiers": [
+                "left_control",
+                "left_command"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Caps Layer: Hyper keys",
+      "manipulators": [
+        {
+          "description": "caps + ` = hyper + `",
+          "type": "basic",
+          "from": {
+            "key_code": "grave_accent_and_tilde",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "grave_accent_and_tilde",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + 1 = hyper + 1",
+          "type": "basic",
+          "from": {
+            "key_code": "1",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "1",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + 2 = hyper + 2",
+          "type": "basic",
+          "from": {
+            "key_code": "2",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "2",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + 3 = hyper + 3",
+          "type": "basic",
+          "from": {
+            "key_code": "3",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "3",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + 4 = hyper + 4",
+          "type": "basic",
+          "from": {
+            "key_code": "4",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "4",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + 5 = hyper + 5",
+          "type": "basic",
+          "from": {
+            "key_code": "5",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "5",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + 6 = hyper + 6",
+          "type": "basic",
+          "from": {
+            "key_code": "6",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "6",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + 7 = hyper + 7",
+          "type": "basic",
+          "from": {
+            "key_code": "7",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "7",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + 8 = hyper + 8",
+          "type": "basic",
+          "from": {
+            "key_code": "8",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "8",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + 9 = hyper + 9",
+          "type": "basic",
+          "from": {
+            "key_code": "9",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "9",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + 0 = hyper + 0",
+          "type": "basic",
+          "from": {
+            "key_code": "0",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "0",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + - = hyper + -",
+          "type": "basic",
+          "from": {
+            "key_code": "hyphen",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "hyphen",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + = = hyper + =",
+          "type": "basic",
+          "from": {
+            "key_code": "equal_sign",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "equal_sign",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + \\ = hyper + \\",
+          "type": "basic",
+          "from": {
+            "key_code": "backslash",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "backslash",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + q = hyper + q",
+          "type": "basic",
+          "from": {
+            "key_code": "q",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "q",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + w = hyper + w",
+          "type": "basic",
+          "from": {
+            "key_code": "w",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "w",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + r = hyper + r",
+          "type": "basic",
+          "from": {
+            "key_code": "r",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "r",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + y = hyper + y",
+          "type": "basic",
+          "from": {
+            "key_code": "y",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "y",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + u = hyper + u",
+          "type": "basic",
+          "from": {
+            "key_code": "u",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "u",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + i = hyper + i",
+          "type": "basic",
+          "from": {
+            "key_code": "i",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "i",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + s = hyper + s",
+          "type": "basic",
+          "from": {
+            "key_code": "s",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "s",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + g = hyper + g",
+          "type": "basic",
+          "from": {
+            "key_code": "g",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "g",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + j = hyper + j",
+          "type": "basic",
+          "from": {
+            "key_code": "j",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "j",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + ; = hyper + ;",
+          "type": "basic",
+          "from": {
+            "key_code": "semicolon",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "semicolon",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + ' = hyper + '",
+          "type": "basic",
+          "from": {
+            "key_code": "quote",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "quote",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + x = hyper + x",
+          "type": "basic",
+          "from": {
+            "key_code": "x",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "x",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + m = hyper + m",
+          "type": "basic",
+          "from": {
+            "key_code": "m",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "m",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + , = hyper + ,",
+          "type": "basic",
+          "from": {
+            "key_code": "comma",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "comma",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + . = hyper + .",
+          "type": "basic",
+          "from": {
+            "key_code": "period",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "period",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
+              ]
+            }
+          ]
+        },
+        {
+          "description": "caps + / = hyper + /",
+          "type": "basic",
+          "from": {
+            "key_code": "slash",
+            "modifiers": {
+              "mandatory": [
+                "right_control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "slash",
+              "modifiers": [
+                "right_command",
+                "right_control",
+                "right_option",
+                "right_shift"
               ]
             }
           ]

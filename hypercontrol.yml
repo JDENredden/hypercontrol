@@ -12,138 +12,45 @@ repo:
 
 rules:
   ################################################################
-  #                       Hyper(Control)                         #
+  #                 How this layout is built                     #
   ################################################################
-  # These rules make Caps + a left-hand modifier act as Control + that
-  # modifier (e.g. Caps+Cmd+Q = Ctrl+Cmd+Q). They send RIGHT control, which
-  # apps treat exactly like left control. Neither keyboard has a physical
-  # right Control key, so right_control marks 'this Control came from Caps'
-  # and the arrow rules further down can key off it. The Escape key still
-  # sends left_control, so a true Ctrl+Shift+F etc. stays available there.
-  - description: Hyper(Control)
+  # Holding Caps Lock sends RIGHT Control. Apps treat it exactly like the
+  # normal (left) Control key, so by default Caps + key = Control + key.
+  # Neither keyboard has a physical right Control key, so "right_control is
+  # down" reliably means "Caps is held", and the rules below key off it:
+  #   - Caps Layer: arrows and editing  -> a few keys become arrows etc.
+  #   - Caps Layer: Hyper keys          -> listed keys send the Hyper chord
+  #                                        (Cmd+Ctrl+Opt+Shift) for app shortcuts
+  # The real Control key (MacBook) / Escape key (HHKB) sends LEFT control,
+  # which no rule touches, so every native Control shortcut still exists there.
+  #
+  # Three shared snippets (YAML anchors: "&name" defines, "*name" reuses):
+  #   &caps_only  Caps + key, nothing else held
+  #   &caps_any   Caps + key, any other modifiers allowed and passed through
+  #   &hyper      the four modifiers that make up the Hyper chord
+
+  ################################################################
+  #                 Caps Lock = Control / Escape                 #
+  ################################################################
+  - description: "Caps Lock to Control (tap for Escape)"
     manipulators:
-      - description: "Capslock + Command = Control + Command"
-        type: basic
-        from: { key_code: caps_lock, modifiers: { mandatory: left_command } }
-        to: [{ key_code: left_command, modifiers: [right_control] }]
-
-      - description: "Capslock + Option = Control + Option"
-        type: basic
-        from: { key_code: caps_lock, modifiers: { mandatory: left_option } }
-        to: [{ key_code: left_option, modifiers: [right_control] }]
-
-      - description: "Capslock + Shift = Control + Shift"
-        type: basic
-        from: { key_code: caps_lock, modifiers: { mandatory: left_shift } }
-        to: [{ key_code: left_shift, modifiers: [right_control] }]
-
-      - description: "Capslock + Shift + Option = Control + Shift + Option"
-        type: basic
-        from:
-          {
-            key_code: caps_lock,
-            modifiers: { mandatory: [left_shift, left_option] },
-          }
-        to: [{ key_code: left_shift, modifiers: [right_control, left_option] }]
-
-      - description: "Capslock + Shift + Command = Control + Shift + Command"
-        type: basic
-        from:
-          {
-            key_code: caps_lock,
-            modifiers: { mandatory: [left_shift, left_command] },
-          }
-        to: [{ key_code: left_shift, modifiers: [right_control, left_command] }]
-
-      - description: "Capslock + Option + Command = Control + Option + Command"
-        type: basic
-        from:
-          {
-            key_code: caps_lock,
-            modifiers: { mandatory: [left_option, left_command] },
-          }
-        to: [{ key_code: left_option, modifiers: [right_control, left_command] }]
-
-      - description: "Capslock + Command = Control + Command (Reverse)"
-        type: basic
-        from:
-          {
-            key_code: left_command,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_option, right_shift],
-              },
-          }
-        to: [{ key_code: left_command, modifiers: [right_control] }]
-
-      - description: "Capslock + Option = Control + Command (Reverse)"
-        type: basic
-        from:
-          {
-            key_code: left_option,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_option, right_shift],
-              },
-          }
-        to: [{ key_code: left_option, modifiers: [right_control] }]
-
-      - description: "Capslock + Shift = Control + Command (Reverse)"
-        type: basic
-        from:
-          {
-            key_code: left_shift,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_option, right_shift],
-              },
-          }
-        to: [{ key_code: left_shift, modifiers: [right_control] }]
-
-  ################################################################
-  #                    Capslock to Esc/Hyper                     #
-  ################################################################
-  - description: CapsLock to Hyper
-    manipulators:
-      - description: "capslock = esc(click) | hyper(hold)"
+      - description: "capslock = esc(click) | right control(hold)"
         type: basic
         from: { key_code: caps_lock, modifiers: { optional: [any] } }
-        # from: { key_code: caps_lock }
-        to:
-          [
-            {
-              key_code: right_shift,
-              modifiers: [right_command, right_control, right_option],
-            },
-          ]
+        to: [{ key_code: right_control }]
         to_if_alone: [{ key_code: escape }]
-
-      - description: "spacebar = emoji"
-        type: basic
-        from:
-          {
-            key_code: spacebar,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-              },
-          }
-        to: [{ key_code: spacebar, modifiers: [left_control, left_command] }]
 
   ################################################################
   #                    Tab to Meh                                #
   ################################################################
+  # Meh = Control+Option+Shift. Built from LEFT-hand modifiers so it never
+  # looks like "Caps is held" (right_control) to the Caps-layer rules.
   - description: Tab to Meh
     manipulators:
       - description: "tab = tab(click) | meh(hold)"
         type: basic
         from: { key_code: tab, modifiers: { optional: [any] } }
-        to:
-          [{ key_code: right_shift, modifiers: [right_control, right_option] }]
+        to: [{ key_code: left_shift, modifiers: [left_control, left_option] }]
         to_if_alone: [{ key_code: tab }]
 
   ################################################################
@@ -231,377 +138,121 @@ rules:
           ]
         parameters: { basic.to_if_alone_timeout_milliseconds: 200 }
 
-  #       - description: "hyper + left shift = {"
-  #         type: basic
-  #         from:
-  #           {
-  #             key_code: left_shift,
-  #             modifiers:
-  #               {
-  #                 mandatory:
-  #                   [right_command, right_control, right_shift, right_option],
-  #               },
-  #           }
-  #         to: [{ key_code: open_bracket, modifiers: [left_shift] }]
-  #
-  #       - description: "hyper + right shift = }"
-  #         type: basic
-  #         from:
-  #           {
-  #             key_code: right_shift,
-  #             modifiers:
-  #               {
-  #                 mandatory:
-  #                   [right_command, right_control, right_shift, right_option],
-  #               },
-  #           }
-  #         to: [{ key_code: close_bracket, modifiers: [right_shift] }]
-
   ################################################################
-  #                       Hyper Control                          #
+  #              Caps Layer: arrows and editing                  #
   ################################################################
-  - description: Hyper(Control) Control Defaults
+  - description: "Caps Layer: arrows and editing"
     manipulators:
-      ################################################################
-      #           HyperControl Control Defaults                      #
-      ################################################################
-
-      # Most keys here send Control+key so macOS's Emacs-style text bindings
-      # (and terminal chords) keep working under Caps.
-      # Exception: f/b/n/p send real arrow keys and h sends backspace, because
-      # those work everywhere (Word, Excel, menus, lists), not just in apps
-      # that understand the Control bindings.
-
-      - description: "a = control-a"
-        type: basic
-        from:
-          {
-            key_code: a,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-                optional: [any],
-              },
-          }
-        to: [{ key_code: a, modifiers: [left_control] }]
-
-      - description: "b = left arrow (was control-b)"
-        type: basic
-        from:
-          {
-            key_code: b,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-                optional: [any],
-              },
-          }
-        to: [{ key_code: left_arrow }]
-
-      - description: "c = control-c"
-        type: basic
-        from:
-          {
-            key_code: c,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-                optional: [any],
-              },
-          }
-        to: [{ key_code: c, modifiers: [left_control] }]
-
-      - description: "d = control-d"
-        type: basic
-        from:
-          {
-            key_code: d,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-                optional: [any],
-              },
-          }
-        to: [{ key_code: d, modifiers: [left_control] }]
-
-      - description: "e = control-e"
-        type: basic
-        from:
-          {
-            key_code: e,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-                optional: [any],
-              },
-          }
-        to: [{ key_code: e, modifiers: [left_control] }]
-
-      - description: "f = right arrow (was control-f)"
+      # f/b/n/p/h send real arrows / backspace (work everywhere, unlike the
+      # Control+f/b/n/p/h text bindings). *caps_any passes every other held
+      # modifier through, from either hand:
+      #   Caps+Shift+F  = Shift+Right  (select)
+      #   Caps+Option+F = Option+Right (word jump)
+      #   Caps+Cmd+F    = Cmd+Right    (end of line)
+      #   Caps+Cmd+H    = Cmd+Backspace (delete to start of line)
+      - description: "caps + f = right arrow"
         type: basic
         from:
           {
             key_code: f,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-                optional: [any],
-              },
+            modifiers: &caps_any { mandatory: [right_control], optional: [any] },
           }
         to: [{ key_code: right_arrow }]
 
-      - description: "h = backspace (was control-h)"
+      - description: "caps + b = left arrow"
         type: basic
-        from:
-          {
-            key_code: h,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-                optional: [any],
-              },
-          }
-        to: [{ key_code: delete_or_backspace }]
-
-      - description: "k = control-k"
-        type: basic
-        from:
-          {
-            key_code: k,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-                optional: [any],
-              },
-          }
-        to: [{ key_code: k, modifiers: [left_control] }]
-
-      - description: "l = control-l"
-        type: basic
-        from:
-          {
-            key_code: l,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-                optional: [any],
-              },
-          }
-        to: [{ key_code: l, modifiers: [left_control] }]
-
-      - description: "n = down arrow (was control-n)"
-        type: basic
-        from:
-          {
-            key_code: n,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-                optional: [any],
-              },
-          }
-        to: [{ key_code: down_arrow }]
-
-      - description: "o = control-o"
-        type: basic
-        from:
-          {
-            key_code: o,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-                optional: [any],
-              },
-          }
-        to: [{ key_code: o, modifiers: [left_control] }]
-
-      - description: "p = up arrow (was control-p)"
-        type: basic
-        from:
-          {
-            key_code: p,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-                optional: [any],
-              },
-          }
-        to: [{ key_code: up_arrow }]
-
-      - description: "t = control-t"
-        type: basic
-        from:
-          {
-            key_code: t,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-                optional: [any],
-              },
-          }
-        to: [{ key_code: t, modifiers: [left_control] }]
-
-      - description: "z = control-z"
-        type: basic
-        from:
-          {
-            key_code: z,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-                optional: [any],
-              },
-          }
-        to: [{ key_code: z, modifiers: [left_control] }]
-
-      ################################################################
-      #     Arrows with Shift / Option (Caps + left modifier)        #
-      ################################################################
-      # When a left-hand modifier is held with Caps, the first rule group
-      # turns Caps into right_control (not Hyper). These rules catch that
-      # state so Caps+Shift+F = Shift+Right (select), Caps+Option+F =
-      # Option+Right (word jump), Caps+Option+H = delete word, and so on.
-      # Only LEFT shift/option are allowed through, on purpose:
-      #  - no Command, so Caps+Cmd+F stays Ctrl+Cmd+F (full screen)
-      #  - no right-hand modifiers, so the Hyper and Tab(Meh) layers, which
-      #    are made of right-hand modifiers, never match these rules.
-
-      - description: "caps + shift/option + f = shift/option + right arrow"
-        type: basic
-        from:
-          {
-            key_code: f,
-            modifiers:
-              {
-                mandatory: [right_control],
-                optional: [left_shift, left_option, caps_lock],
-              },
-          }
-        to: [{ key_code: right_arrow }]
-
-      - description: "caps + shift/option + b = shift/option + left arrow"
-        type: basic
-        from:
-          {
-            key_code: b,
-            modifiers:
-              {
-                mandatory: [right_control],
-                optional: [left_shift, left_option, caps_lock],
-              },
-          }
+        from: { key_code: b, modifiers: *caps_any }
         to: [{ key_code: left_arrow }]
 
-      - description: "caps + shift/option + n = shift/option + down arrow"
+      - description: "caps + n = down arrow"
         type: basic
-        from:
-          {
-            key_code: n,
-            modifiers:
-              {
-                mandatory: [right_control],
-                optional: [left_shift, left_option, caps_lock],
-              },
-          }
+        from: { key_code: n, modifiers: *caps_any }
         to: [{ key_code: down_arrow }]
 
-      - description: "caps + shift/option + p = shift/option + up arrow"
+      - description: "caps + p = up arrow"
         type: basic
-        from:
-          {
-            key_code: p,
-            modifiers:
-              {
-                mandatory: [right_control],
-                optional: [left_shift, left_option, caps_lock],
-              },
-          }
+        from: { key_code: p, modifiers: *caps_any }
         to: [{ key_code: up_arrow }]
 
-      - description: "caps + shift/option + h = shift/option + backspace"
+      - description: "caps + h = backspace"
         type: basic
-        from:
-          {
-            key_code: h,
-            modifiers:
-              {
-                mandatory: [right_control],
-                optional: [left_shift, left_option, caps_lock],
-              },
-          }
+        from: { key_code: h, modifiers: *caps_any }
         to: [{ key_code: delete_or_backspace }]
 
-  ################################################################
-  #                       Hyper Layer                            #
-  ################################################################
-  - description: "Hyper Layer"
-    manipulators:
-      - description: "Hyper + v = Paste and Match Style"
+      - description: "caps + delete = forward delete"
+        type: basic
+        from: { key_code: delete_or_backspace, modifiers: *caps_any }
+        to: [{ key_code: delete_forward }]
+
+      # The rest only fire with Caps and nothing else (*caps_only). Add another
+      # modifier and they fall through as Control + that modifier + key.
+      - description: "caps + v = paste and match style"
         type: basic
         from:
           {
             key_code: v,
             modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-              },
+              &caps_only { mandatory: [right_control], optional: [caps_lock] },
           }
-        to:
-          [{ key_code: v, modifiers: [left_option, left_shift, left_command] }]
+        to: [{ key_code: v, modifiers: [left_option, left_shift, left_command] }]
 
-      - description: "Hyper + Delete = Forward Delete"
+      - description: "caps + [ = previous space"
         type: basic
-        from:
-          {
-            key_code: delete_or_backspace,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-              },
-          }
-        to: [{ key_code: delete_forward }]
-
-      - description: " [ = Prev space"
-        type: basic
-        from:
-          {
-            key_code: open_bracket,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-              },
-          }
+        from: { key_code: open_bracket, modifiers: *caps_only }
         to: [{ key_code: left_arrow, modifiers: [left_control] }]
 
-      - description: " ] = next space"
+      - description: "caps + ] = next space"
         type: basic
-        from:
-          {
-            key_code: close_bracket,
-            modifiers:
-              {
-                mandatory:
-                  [right_command, right_control, right_shift, right_option],
-              },
-          }
+        from: { key_code: close_bracket, modifiers: *caps_only }
         to: [{ key_code: right_arrow, modifiers: [left_control] }]
+
+      - description: "caps + space = emoji picker"
+        type: basic
+        from: { key_code: spacebar, modifiers: *caps_only }
+        to: [{ key_code: spacebar, modifiers: [left_control, left_command] }]
+
+  ################################################################
+  #                 Caps Layer: Hyper keys                       #
+  ################################################################
+  # Each key listed here sends Hyper+key (Cmd+Ctrl+Opt+Shift+key), the chord
+  # you bind inside apps (launchers, window manager, ...).
+  # These are exactly the keys that passed through as Hyper before the
+  # restructure, so existing app bindings keep working.
+  # A key NOT listed here is plain Control+key when pressed with Caps.
+  # To add a shortcut key: copy one line and change both key_codes.
+  # The trailing comment is the v3 design label, for reference only.
+  - description: "Caps Layer: Hyper keys"
+    manipulators:
+      - { description: "caps + ` = hyper + `", type: basic, from: { key_code: grave_accent_and_tilde, modifiers: *caps_only }, to: [{ key_code: grave_accent_and_tilde, modifiers: &hyper [right_command, right_control, right_option, right_shift] }] } # window: maximise
+      - { description: "caps + 1 = hyper + 1", type: basic, from: { key_code: "1", modifiers: *caps_only }, to: [{ key_code: "1", modifiers: *hyper }] } # window: quarter 1
+      - { description: "caps + 2 = hyper + 2", type: basic, from: { key_code: "2", modifiers: *caps_only }, to: [{ key_code: "2", modifiers: *hyper }] } # window: quarter 2
+      - { description: "caps + 3 = hyper + 3", type: basic, from: { key_code: "3", modifiers: *caps_only }, to: [{ key_code: "3", modifiers: *hyper }] } # window: quarter 3
+      - { description: "caps + 4 = hyper + 4", type: basic, from: { key_code: "4", modifiers: *caps_only }, to: [{ key_code: "4", modifiers: *hyper }] } # window: quarter 4
+      - { description: "caps + 5 = hyper + 5", type: basic, from: { key_code: "5", modifiers: *caps_only }, to: [{ key_code: "5", modifiers: *hyper }] } # window: half left
+      - { description: "caps + 6 = hyper + 6", type: basic, from: { key_code: "6", modifiers: *caps_only }, to: [{ key_code: "6", modifiers: *hyper }] } # window: half right
+      - { description: "caps + 7 = hyper + 7", type: basic, from: { key_code: "7", modifiers: *caps_only }, to: [{ key_code: "7", modifiers: *hyper }] } # window: half top
+      - { description: "caps + 8 = hyper + 8", type: basic, from: { key_code: "8", modifiers: *caps_only }, to: [{ key_code: "8", modifiers: *hyper }] } # window: half bottom
+      - { description: "caps + 9 = hyper + 9", type: basic, from: { key_code: "9", modifiers: *caps_only }, to: [{ key_code: "9", modifiers: *hyper }] } # window: reasonable size
+      - { description: "caps + 0 = hyper + 0", type: basic, from: { key_code: "0", modifiers: *caps_only }, to: [{ key_code: "0", modifiers: *hyper }] } # window: centre
+      - { description: "caps + - = hyper + -", type: basic, from: { key_code: hyphen, modifiers: *caps_only }, to: [{ key_code: hyphen, modifiers: *hyper }] } # clipboard popup
+      - { description: "caps + = = hyper + =", type: basic, from: { key_code: equal_sign, modifiers: *caps_only }, to: [{ key_code: equal_sign, modifiers: *hyper }] } # Access
+      - { description: "caps + \\ = hyper + \\", type: basic, from: { key_code: backslash, modifiers: *caps_only }, to: [{ key_code: backslash, modifiers: *hyper }] } # Passwords
+      - { description: "caps + q = hyper + q", type: basic, from: { key_code: q, modifiers: *caps_only }, to: [{ key_code: q, modifiers: *hyper }] } # BusyCal
+      - { description: "caps + w = hyper + w", type: basic, from: { key_code: w, modifiers: *caps_only }, to: [{ key_code: w, modifiers: *hyper }] } # Notes  (NB: Hyper+W is also macOS Wi-Fi diagnostics)
+      - { description: "caps + r = hyper + r", type: basic, from: { key_code: r, modifiers: *caps_only }, to: [{ key_code: r, modifiers: *hyper }] } # Reminders
+      - { description: "caps + y = hyper + y", type: basic, from: { key_code: y, modifiers: *caps_only }, to: [{ key_code: y, modifiers: *hyper }] } # iMessage
+      - { description: "caps + u = hyper + u", type: basic, from: { key_code: u, modifiers: *caps_only }, to: [{ key_code: u, modifiers: *hyper }] } # Music
+      - { description: "caps + i = hyper + i", type: basic, from: { key_code: i, modifiers: *caps_only }, to: [{ key_code: i, modifiers: *hyper }] } # Nova
+      - { description: "caps + s = hyper + s", type: basic, from: { key_code: s, modifiers: *caps_only }, to: [{ key_code: s, modifiers: *hyper }] } # Safari
+      - { description: "caps + g = hyper + g", type: basic, from: { key_code: g, modifiers: *caps_only }, to: [{ key_code: g, modifiers: *hyper }] } # Hookmark
+      - { description: "caps + j = hyper + j", type: basic, from: { key_code: j, modifiers: *caps_only }, to: [{ key_code: j, modifiers: *hyper }] } # FinBar
+      - { description: "caps + ; = hyper + ;", type: basic, from: { key_code: semicolon, modifiers: *caps_only }, to: [{ key_code: semicolon, modifiers: *hyper }] } # expand text
+      - { description: "caps + ' = hyper + '", type: basic, from: { key_code: quote, modifiers: *caps_only }, to: [{ key_code: quote, modifiers: *hyper }] } # AI chat
+      - { description: "caps + x = hyper + x", type: basic, from: { key_code: x, modifiers: *caps_only }, to: [{ key_code: x, modifiers: *hyper }] } # iTerm2
+      - { description: "caps + m = hyper + m", type: basic, from: { key_code: m, modifiers: *caps_only }, to: [{ key_code: m, modifiers: *hyper }] } # Mail
+      - { description: "caps + , = hyper + ,", type: basic, from: { key_code: comma, modifiers: *caps_only }, to: [{ key_code: comma, modifiers: *hyper }] } # (Home)
+      - { description: "caps + . = hyper + .", type: basic, from: { key_code: period, modifiers: *caps_only }, to: [{ key_code: period, modifiers: *hyper }] } # Select  (NB: Hyper+. is also macOS sysdiagnose)
+      - { description: "caps + / = hyper + /", type: basic, from: { key_code: slash, modifiers: *caps_only }, to: [{ key_code: slash, modifiers: *hyper }] } # Finder
 
   ################################################################
   #                    Escape to Greek                           #
