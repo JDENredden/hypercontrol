@@ -1,0 +1,789 @@
+---
+title: Hyper Control
+url:
+version: 1.0
+maintainers: [jden]
+author: jden(iam@jden.me)
+website: http://hypercontrol.app
+json_url: https://hypercontrol.app/hypercontrol.json
+import_url:
+gallery_url:
+repo:
+
+rules:
+  ################################################################
+  #                       Hyper(Control)                         #
+  ################################################################
+  - description: Hyper(Control)
+    manipulators:
+      - description: "Capslock + Command = Control + Command"
+        type: basic
+        from: { key_code: caps_lock, modifiers: { mandatory: left_command } }
+        to: [{ key_code: left_command, modifiers: [left_control] }]
+
+      - description: "Hyper(Control) + Control = Control + Control #1"
+        type: basic
+        from:
+          {
+            key_code: right_shift,
+            modifiers: { mandatory: left_command, right_command, right_option },
+          }
+        to: [{ key_code: left_command, modififers: [left_control] }]
+
+      - description: "Hyper(Control) + Control = Control + Control #1"
+        type: basic
+        from:
+          {
+            key_code: left_command,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: left_command, modifiers: [left_control] }]
+
+      - description: "Capslock + Option = Control + Option"
+        type: basic
+        from: { key_code: caps_lock, modifiers: { mandatory: left_option } }
+        to: [{ key_code: left_option, modifiers: [left_control] }]
+
+      - description: "Hyper(Control) + Option = Control + Option #1"
+        type: basic
+        from:
+          {
+            key_code: right_shift,
+            modifiers: { mandatory: left_option, right_command, right_option },
+          }
+        to: [{ key_code: left_option, modififers: [left_control] }]
+
+      - description: "Hyper(Control) + Option = Control + Option #2"
+        type: basic
+        from:
+          {
+            key_code: left_option,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: left_option, modifiers: [left_control] }]
+
+  ################################################################
+  #                    Capslock to Esc/Hyper                     #
+  ################################################################
+  - description: CapsLock to Hyper
+    manipulators:
+      - description: "capslock = esc(click) | hyper(hold)"
+        type: basic
+        from: { key_code: caps_lock, modifiers: { optional: [any] } }
+        to:
+          [
+            {
+              key_code: right_shift,
+              modifiers: [right_command, right_control, right_option],
+            },
+          ]
+        to_if_alone: [{ key_code: escape }]
+
+      - description: "spacebar = emoji"
+        type: basic
+        from:
+          {
+            key_code: spacebar,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: spacebar, modifiers: [left_control, left_command] }]
+
+  ################################################################
+  #                       Hyper Shifting                         #
+  ################################################################
+  - description: Hyper Shifting
+    manipulators:
+      - description: "Left shift = ("
+        type: basic
+        from: { key_code: left_shift }
+        to: [{ key_code: left_shift }]
+        to_if_alone: [{ key_code: "9", modifiers: [left_shift] }]
+
+      - description: "Right shift = )"
+        type: basic
+        from: { key_code: right_shift }
+        to: [{ key_code: right_shift }]
+        to_if_alone: [{ key_code: "0", modifiers: [right_shift] }]
+
+      - description: "Shift rolls: ()"
+        type: basic
+        from: { key_code: left_shift, modifiers: { mandatory: [right_shift] } }
+        to: [{ key_code: left_shift }, { key_code: right_shift }]
+        to_if_alone:
+          [
+            { key_code: "0", modifiers: [right_shift, left_shift] },
+            { key_code: "9", modifiers: [right_shift, left_shift] },
+          ]
+
+      - description: "Shift rolls: )("
+        type: basic
+        from: { key_code: right_shift, modifiers: { mandatory: [left_shift] } }
+        to: [{ key_code: right_shift }, { key_code: left_shift }]
+        to_if_alone:
+          [
+            { key_code: "9", modifiers: [right_shift] },
+            { key_code: "0", modifiers: [right_shift] },
+          ]
+
+      - description: "space + ) = ) + space"
+        type: basic
+        from: { key_code: spacebar, modifiers: { mandatory: [right_shift] } }
+        to:
+          [{ key_code: "0", modifiers: [right_shift] }, { key_code: spacebar }]
+
+      - description: "hyper + left shift = {"
+        type: basic
+        from:
+          {
+            key_code: left_shift,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: open_bracket, modifiers: [left_shift] }]
+
+      - description: "hyper + right shift = }"
+        type: basic
+        from:
+          {
+            key_code: right_shift,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: close_bracket, modifiers: [right_shift] }]
+
+  ################################################################
+  #                       Hyper Control                          #
+  ################################################################
+  - description: Hyper(Control) Navigation
+    manipulators:
+      ################################################################
+      #           HyperControl Text Navigation                       #
+      ################################################################
+
+      #==========================================================#
+      # Command + Arrow Keys                                     #
+      #==========================================================#
+
+      - description: "HyperControl + Command + h = Command + Left"
+        type: basic
+        from:
+          {
+            key_code: h,
+            modifiers: { mandatory: [left_command, left_control] },
+          }
+        to: [{ key_code: left_arrow, modifiers: [left_command] }]
+
+      - description: "HyperControl + Command + j = Command + Down"
+        type: basic
+        from:
+          {
+            key_code: j,
+            modifiers: { mandatory: [left_command, left_control] },
+          }
+        to: [{ key_code: down_arrow, modifiers: [left_command] }]
+      - description: "HyperControl + Command + k = Command + Up"
+
+        type: basic
+        from:
+          {
+            key_code: k,
+            modifiers: { mandatory: [left_command, left_control] },
+          }
+        to: [{ key_code: up_arrow, modifiers: [left_command] }]
+
+      - description: "HyperControl + Command + l = Command + Right"
+        type: basic
+        from:
+          {
+            key_code: l,
+            modifiers: { mandatory: [left_command, left_control] },
+          }
+        to: [{ key_code: right_arrow, modifiers: [left_command] }]
+
+      #==========================================================#
+      # Option + Arrow Keys                                      #
+      #==========================================================#
+
+      - description: "HyperControl + Option + h = Option + Left"
+        type: basic
+        from:
+          { key_code: h, modifiers: { mandatory: [left_option, left_control] } }
+        to: [{ key_code: left_arrow, modifiers: [left_option] }]
+
+      - description: "HyperControl + Option + j = Option + Down"
+        type: basic
+        from:
+          { key_code: j, modifiers: { mandatory: [left_option, left_control] } }
+        to: [{ key_code: down_arrow, modifiers: [left_option] }]
+
+      - description: "HyperControl + Option + k = Option + Up"
+        type: basic
+        from:
+          { key_code: k, modifiers: { mandatory: [left_option, left_control] } }
+        to: [{ key_code: up_arrow, modifiers: [left_option] }]
+
+      - description: "HyperControl + Option + l = Option + Right"
+        type: basic
+        from:
+          { key_code: l, modifiers: { mandatory: [left_option, left_control] } }
+        to: [{ key_code: right_arrow, modifiers: [left_option] }]
+
+  ################################################################
+  #                       Hyper Layer                            #
+  ################################################################
+  - description: "Hyper Layer"
+    manipulators:
+      - description: "Hyper + v = Paste and Match Style"
+        type: basic
+        from:
+          {
+            key_code: v,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to:
+          [{ key_code: v, modifiers: [left_option, left_shift, left_command] }]
+
+      - description: "Hyper + Delete = Forward Delete"
+        type: basic
+        from:
+          {
+            key_code: delete_or_backspace,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: delete_forward }]
+
+      #==========================================================#
+      # ( h ) + ( ⌘⌥⇧⌃ )  -> ( left )                            #
+      #==========================================================#
+      # command: selection
+      - description: " h = left"
+        type: basic
+        from:
+          {
+            key_code: h,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: left_arrow }]
+
+      #==========================================================#
+      # ( j ) + ( ⌘⌥⇧⌃ )  -> ( down )                            #
+      #==========================================================#
+      # command: selection
+      - description: " j = down"
+        type: basic
+        from:
+          {
+            key_code: j,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: down_arrow }]
+
+      #==========================================================#
+      # ( k ) + ( ⌘⌥⇧⌃ )  -> ( up )                            #
+      #==========================================================#
+      # command: selection
+      - description: " k = up"
+        type: basic
+        from:
+          {
+            key_code: k,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: up_arrow }]
+
+      #==========================================================#
+      # ( l ) + ( ⌘⌥⇧⌃ )  -> ( right )                            #
+      #==========================================================#
+      - description: " l = right"
+        type: basic
+        from:
+          {
+            key_code: l,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: right_arrow }]
+
+      #==========================================================#
+      # Page Navigation                                          #
+      #==========================================================#
+
+      #==========================================================#
+      # ( y ) + ( ⌘⌥⇧⌃ )  -> ( PageUp )                          #
+      #==========================================================#
+      - description: " y = page_up"
+        type: basic
+        from:
+          {
+            key_code: y,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: page_up }]
+
+      #==========================================================#
+      # ( u ) + ( ⌘⌥⇧⌃ )  -> ( Home )                          #
+      #==========================================================#
+      - description: " u = home"
+        type: basic
+        from:
+          {
+            key_code: u,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: home }]
+
+      #==========================================================#
+      # ( i ) + ( ⌘⌥⇧⌃ )  -> ( End )                          #
+      #==========================================================#
+      - description: " i = end"
+        type: basic
+        from:
+          {
+            key_code: i,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: end }]
+
+      #==========================================================#
+      # ( o ) + ( ⌘⌥⇧⌃ )  -> ( PageDown )                          #
+      #==========================================================#
+      - description: " o = page_down"
+        type: basic
+        from:
+          {
+            key_code: o,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: page_down }]
+
+      - description: "a = PrevTab"
+        type: basic
+        from:
+          {
+            key_code: a,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: open_bracket, modifiers: [left_command, left_shift] }]
+
+      - description: "s = NextTab"
+        type: basic
+        from:
+          {
+            key_code: s,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: close_bracket, modifiers: [left_command, left_shift] }]
+
+      #==========================================================#
+      # Terminal                                                 #
+      #==========================================================#
+
+      #==========================================================#
+      # ( d ) -->  Ctrl-D (EOF)                                  #
+      #==========================================================#
+      - description: "d = ctrl-d (EOF)"
+        type: basic
+        from:
+          {
+            key_code: d,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: d, modifiers: [left_control] }]
+
+      #==========================================================#
+      # ( z ) -->  Ctrl-Z (SIGTSTP)                              #
+      #==========================================================#
+      - description: "z = ctrl-z"
+        type: basic
+        from:
+          {
+            key_code: z,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: z, modifiers: [left_control] }]
+
+      #==========================================================#
+      # ( x ) -->  Ctrl-R (Run)                                  #
+      #==========================================================#
+      - description: "x = ctrl-r"
+        type: basic
+        from:
+          {
+            key_code: x,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: r, modifiers: [left_control] }]
+
+      #==========================================================#
+      # ( c ) -->  Ctrl-C (SIGINT)                               #
+      #==========================================================#
+      - description: "c = ctrl-c"
+        type: basic
+        from:
+          {
+            key_code: c,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: c, modifiers: [left_control] }]
+
+      #==========================================================#
+      # ( v ) -->  Vim Prefix Meta Key                           #
+      #==========================================================#
+      # - description: 'v = vim meta key'
+      - description: "v = ctrl-v"
+        type: basic
+        from:
+          {
+            key_code: v,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: v, modifiers: [left_control] }]
+
+      #==========================================================#
+      # ( b ) -->  Tmux Prefix Meta Key                          #
+      #==========================================================#
+      # - description: 'b = tmux meta key'
+      - description: "b = ctrl-b"
+        type: basic
+        from:
+          {
+            key_code: b,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: b, modifiers: [left_control] }]
+
+      #==========================================================#
+      # App Launcher                                             #
+      #==========================================================#
+
+      #==========================================================#
+      # ( \ ) --> 1Password                                      #
+      #==========================================================#
+      - description: '\ = 1Password'
+        type: basic
+        from:
+          {
+            key_code: backslash,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ shell_command: open -a 1password }]
+
+      #==========================================================#
+      # ( \ ) --> 1Password                                      #
+      #==========================================================#
+      - description: "= = Step Two"
+        type: basic
+        from:
+          {
+            key_code: equal_sign,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ shell_command: open -a "Step Two" }]
+
+      #==========================================================#
+      # ( n ) --> Finder                                         #
+      #==========================================================#
+      - description: "n = Finder"
+        type: basic
+        from:
+          {
+            key_code: n,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ shell_command: open -a finder }]
+
+      #==========================================================#
+      # ( m ) --> MailMate                                       #
+      #==========================================================#
+      - description: "m = MailMate"
+        type: basic
+        from:
+          {
+            key_code: m,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ shell_command: open -a mailmate }]
+
+      #==========================================================#
+      # ( , ) --> iterm                                          #
+      #==========================================================#
+      - description: ", = iTerm2"
+        type: basic
+        from:
+          {
+            key_code: comma,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ shell_command: open -a iTerm }]
+
+      #==========================================================#
+      # ( . ) --> Nova                                           #
+      #==========================================================#
+      - description: ". = Nova"
+        type: basic
+        from:
+          {
+            key_code: period,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ shell_command: open -a nova }]
+
+      #==========================================================#
+      # ( / ) --> Safari                                         #
+      #==========================================================#
+      - description: "/ = Safari"
+        type: basic
+        from:
+          {
+            key_code: slash,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ shell_command: open -a safari }]
+
+      #==========================================================#
+      # ( ; ) --> GoodTask                                       #
+      #==========================================================#
+      - description: "; = GoodTask"
+        type: basic
+        from:
+          {
+            key_code: semicolon,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ shell_command: open -a goodtask }]
+
+      #==========================================================#
+      # ( ' ) --> Messages                                       #
+      #==========================================================#
+      - description: "quote = Messages"
+        type: basic
+        from:
+          {
+            key_code: quote,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ shell_command: open -a messages }]
+
+      #==========================================================#
+      # ( [ ) --> NotePlan                                       #
+      #==========================================================#
+      - description: "[ = NotePlan"
+        type: basic
+        from:
+          {
+            key_code: open_bracket,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ shell_command: open -a noteplan }]
+
+      #==========================================================#
+      # ( ] ) --> Obsidian                                       #
+      #==========================================================#
+      - description: "] = Obsidian"
+        type: basic
+        from:
+          {
+            key_code: close_bracket,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ shell_command: open -a obsidian }]
+
+  ################################################################
+  #                    Escape to Greek                           #
+  ################################################################
+  - description: "Hyper(Control) Greek"
+    manipulators:
+      - description: "Esc to Command-Command"
+        type: basic
+        from: { key_code: escape }
+        to: [{ key_code: right_command, modifiers: [left_command] }]
+
+      - description: "alpha"
+        type: basic
+        from:
+          {
+            key_code: a,
+            modifiers: { mandatory: [right_command, left_command] },
+          }
+        to:
+          [
+            { shell_command: 'export LC_ALL=en_US.UTF-8; printf "α" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "alpha caps"
+        type: basic
+        from:
+          {
+            key_code: a,
+            modifiers: { mandatory: [right_command, left_command, shift] },
+          }
+        to:
+          [
+            { shell_command: 'export LC_ALL=en_US.UTF-8; printf "Α" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "alpha latex"
+        type: basic
+        from:
+          {
+            key_code: a,
+            modifiers: { mandatory: [right_command, left_command, option] },
+          }
+        to:
+          [
+            { shell_command: 'printf "\\\alpha" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "alpha latex"
+        type: basic
+        from:
+          {
+            key_code: a,
+            modifiers:
+              { mandatory: [right_command, left_command, shift, option] },
+          }
+        to:
+          [
+            { shell_command: 'printf "\\\Alpha" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]

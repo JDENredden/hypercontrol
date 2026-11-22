@@ -1,0 +1,980 @@
+---
+title: Hyper Control
+url:
+version: 1.0
+maintainers: [jden]
+author: jden(iam@jden.me)
+website: http://hypercontrol.app
+json_url: https://hypercontrol.app/hypercontrol.json
+import_url:
+gallery_url:
+repo:
+
+rules:
+  ################################################################
+  #                       Hyper(Control)                         #
+  ################################################################
+  # These rules make Caps + a left-hand modifier act as Control + that
+  # modifier (e.g. Caps+Cmd+Q = Ctrl+Cmd+Q). They send RIGHT control, which
+  # apps treat exactly like left control. Neither keyboard has a physical
+  # right Control key, so right_control marks 'this Control came from Caps'
+  # and the arrow rules further down can key off it. The Escape key still
+  # sends left_control, so a true Ctrl+Shift+F etc. stays available there.
+  - description: Hyper(Control)
+    manipulators:
+      - description: "Capslock + Command = Control + Command"
+        type: basic
+        from: { key_code: caps_lock, modifiers: { mandatory: left_command } }
+        to: [{ key_code: left_command, modifiers: [right_control] }]
+
+      - description: "Capslock + Option = Control + Option"
+        type: basic
+        from: { key_code: caps_lock, modifiers: { mandatory: left_option } }
+        to: [{ key_code: left_option, modifiers: [right_control] }]
+
+      - description: "Capslock + Shift = Control + Shift"
+        type: basic
+        from: { key_code: caps_lock, modifiers: { mandatory: left_shift } }
+        to: [{ key_code: left_shift, modifiers: [right_control] }]
+
+      - description: "Capslock + Shift + Option = Control + Shift + Option"
+        type: basic
+        from:
+          {
+            key_code: caps_lock,
+            modifiers: { mandatory: [left_shift, left_option] },
+          }
+        to: [{ key_code: left_shift, modifiers: [right_control, left_option] }]
+
+      - description: "Capslock + Shift + Command = Control + Shift + Command"
+        type: basic
+        from:
+          {
+            key_code: caps_lock,
+            modifiers: { mandatory: [left_shift, left_command] },
+          }
+        to: [{ key_code: left_shift, modifiers: [right_control, left_command] }]
+
+      - description: "Capslock + Option + Command = Control + Option + Command"
+        type: basic
+        from:
+          {
+            key_code: caps_lock,
+            modifiers: { mandatory: [left_option, left_command] },
+          }
+        to: [{ key_code: left_option, modifiers: [right_control, left_command] }]
+
+      - description: "Capslock + Command = Control + Command (Reverse)"
+        type: basic
+        from:
+          {
+            key_code: left_command,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_option, right_shift],
+              },
+          }
+        to: [{ key_code: left_command, modifiers: [right_control] }]
+
+      - description: "Capslock + Option = Control + Command (Reverse)"
+        type: basic
+        from:
+          {
+            key_code: left_option,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_option, right_shift],
+              },
+          }
+        to: [{ key_code: left_option, modifiers: [right_control] }]
+
+      - description: "Capslock + Shift = Control + Command (Reverse)"
+        type: basic
+        from:
+          {
+            key_code: left_shift,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_option, right_shift],
+              },
+          }
+        to: [{ key_code: left_shift, modifiers: [right_control] }]
+
+  ################################################################
+  #                    Capslock to Esc/Hyper                     #
+  ################################################################
+  - description: CapsLock to Hyper
+    manipulators:
+      - description: "capslock = esc(click) | hyper(hold)"
+        type: basic
+        from: { key_code: caps_lock, modifiers: { optional: [any] } }
+        # from: { key_code: caps_lock }
+        to:
+          [
+            {
+              key_code: right_shift,
+              modifiers: [right_command, right_control, right_option],
+            },
+          ]
+        to_if_alone: [{ key_code: escape }]
+
+      - description: "spacebar = emoji"
+        type: basic
+        from:
+          {
+            key_code: spacebar,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: spacebar, modifiers: [left_control, left_command] }]
+
+  ################################################################
+  #                    Tab to Meh                                #
+  ################################################################
+  - description: Tab to Meh
+    manipulators:
+      - description: "tab = tab(click) | meh(hold)"
+        type: basic
+        from: { key_code: tab, modifiers: { optional: [any] } }
+        to:
+          [{ key_code: right_shift, modifiers: [right_control, right_option] }]
+        to_if_alone: [{ key_code: tab }]
+
+  ################################################################
+  #                    Escape to Control                         #
+  ################################################################
+  - description: Escape to Control
+    manipulators:
+      - description: "Escape = control"
+        type: basic
+        from: { key_code: escape }
+        to: [key_code: left_control]
+
+  ################################################################
+  #                       Hyper Shifting                         #
+  ################################################################
+  - description: Hyper Shifting
+    manipulators:
+      # Rolling fix: typing ")" then Space quickly means Space lands while
+      # right Shift is still down. This rule turns that into ") ".
+      # It only applies while rshift_fresh is 1, i.e. within the short window
+      # after right Shift was pressed (see "Right shift = )" below), so holding
+      # Shift through a space, or Shift+Space to scroll, is left alone.
+      # Must stay ABOVE the right-shift rule: Karabiner checks rules top-down,
+      # and this mirrors its documented double-press pattern.
+      - description: "space + ) = ) + space (only just after pressing right shift)"
+        type: basic
+        from: { key_code: spacebar, modifiers: { mandatory: [right_shift] } }
+        to:
+          [{ key_code: "0", modifiers: [right_shift] }, { key_code: spacebar }]
+        conditions: [{ type: variable_if, name: rshift_fresh, value: 1 }]
+
+      # Tap window for all four Shift rules is 200 ms (the global default in
+      # karabiner.json is 500 ms, which made slow Shift presses type parens).
+      # Tune: basic.to_if_alone_timeout_milliseconds below.
+      - description: "Left shift = ("
+        type: basic
+        from: { key_code: left_shift }
+        to: [{ key_code: left_shift }]
+        to_if_alone: [{ key_code: "9", modifiers: [left_shift] }]
+        parameters: { basic.to_if_alone_timeout_milliseconds: 200 }
+
+      # Pressing right Shift also sets rshift_fresh = 1, then clears it after
+      # 150 ms (to_if_invoked) or as soon as another key is pressed
+      # (to_if_canceled). That is the window the Space rule above relies on.
+      # Tune: basic.to_delayed_action_delay_milliseconds below.
+      - description: "Right shift = )"
+        type: basic
+        from: { key_code: right_shift }
+        to:
+          [
+            { set_variable: { name: rshift_fresh, value: 1 } },
+            { key_code: right_shift },
+          ]
+        to_if_alone: [{ key_code: "0", modifiers: [right_shift] }]
+        to_delayed_action:
+          to_if_invoked: [{ set_variable: { name: rshift_fresh, value: 0 } }]
+          to_if_canceled: [{ set_variable: { name: rshift_fresh, value: 0 } }]
+        parameters:
+          {
+            basic.to_if_alone_timeout_milliseconds: 200,
+            basic.to_delayed_action_delay_milliseconds: 150,
+          }
+
+      # Right Shift held, then left Shift tapped: types ")(".
+      - description: "Shift rolls: )("
+        type: basic
+        from: { key_code: left_shift, modifiers: { mandatory: [right_shift] } }
+        to: [{ key_code: left_shift }, { key_code: right_shift }]
+        to_if_alone:
+          [
+            { key_code: "0", modifiers: [right_shift, left_shift] },
+            { key_code: "9", modifiers: [right_shift, left_shift] },
+          ]
+        parameters: { basic.to_if_alone_timeout_milliseconds: 200 }
+
+      # Left Shift held, then right Shift tapped: types "()".
+      - description: "Shift rolls: ()"
+        type: basic
+        from: { key_code: right_shift, modifiers: { mandatory: [left_shift] } }
+        to: [{ key_code: right_shift }, { key_code: left_shift }]
+        to_if_alone:
+          [
+            { key_code: "9", modifiers: [right_shift] },
+            { key_code: "0", modifiers: [right_shift] },
+          ]
+        parameters: { basic.to_if_alone_timeout_milliseconds: 200 }
+
+  #       - description: "hyper + left shift = {"
+  #         type: basic
+  #         from:
+  #           {
+  #             key_code: left_shift,
+  #             modifiers:
+  #               {
+  #                 mandatory:
+  #                   [right_command, right_control, right_shift, right_option],
+  #               },
+  #           }
+  #         to: [{ key_code: open_bracket, modifiers: [left_shift] }]
+  #
+  #       - description: "hyper + right shift = }"
+  #         type: basic
+  #         from:
+  #           {
+  #             key_code: right_shift,
+  #             modifiers:
+  #               {
+  #                 mandatory:
+  #                   [right_command, right_control, right_shift, right_option],
+  #               },
+  #           }
+  #         to: [{ key_code: close_bracket, modifiers: [right_shift] }]
+
+  ################################################################
+  #                       Hyper Control                          #
+  ################################################################
+  - description: Hyper(Control) Control Defaults
+    manipulators:
+      ################################################################
+      #           HyperControl Control Defaults                      #
+      ################################################################
+
+      # Most keys here send Control+key so macOS's Emacs-style text bindings
+      # (and terminal chords) keep working under Caps.
+      # Exception: f/b/n/p send real arrow keys and h sends backspace, because
+      # those work everywhere (Word, Excel, menus, lists), not just in apps
+      # that understand the Control bindings.
+
+      - description: "a = control-a"
+        type: basic
+        from:
+          {
+            key_code: a,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+                optional: [any],
+              },
+          }
+        to: [{ key_code: a, modifiers: [left_control] }]
+
+      - description: "b = left arrow (was control-b)"
+        type: basic
+        from:
+          {
+            key_code: b,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+                optional: [any],
+              },
+          }
+        to: [{ key_code: left_arrow }]
+
+      - description: "c = control-c"
+        type: basic
+        from:
+          {
+            key_code: c,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+                optional: [any],
+              },
+          }
+        to: [{ key_code: c, modifiers: [left_control] }]
+
+      - description: "d = control-d"
+        type: basic
+        from:
+          {
+            key_code: d,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+                optional: [any],
+              },
+          }
+        to: [{ key_code: d, modifiers: [left_control] }]
+
+      - description: "e = control-e"
+        type: basic
+        from:
+          {
+            key_code: e,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+                optional: [any],
+              },
+          }
+        to: [{ key_code: e, modifiers: [left_control] }]
+
+      - description: "f = right arrow (was control-f)"
+        type: basic
+        from:
+          {
+            key_code: f,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+                optional: [any],
+              },
+          }
+        to: [{ key_code: right_arrow }]
+
+      - description: "h = backspace (was control-h)"
+        type: basic
+        from:
+          {
+            key_code: h,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+                optional: [any],
+              },
+          }
+        to: [{ key_code: delete_or_backspace }]
+
+      - description: "k = control-k"
+        type: basic
+        from:
+          {
+            key_code: k,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+                optional: [any],
+              },
+          }
+        to: [{ key_code: k, modifiers: [left_control] }]
+
+      - description: "l = control-l"
+        type: basic
+        from:
+          {
+            key_code: l,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+                optional: [any],
+              },
+          }
+        to: [{ key_code: l, modifiers: [left_control] }]
+
+      - description: "n = down arrow (was control-n)"
+        type: basic
+        from:
+          {
+            key_code: n,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+                optional: [any],
+              },
+          }
+        to: [{ key_code: down_arrow }]
+
+      - description: "o = control-o"
+        type: basic
+        from:
+          {
+            key_code: o,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+                optional: [any],
+              },
+          }
+        to: [{ key_code: o, modifiers: [left_control] }]
+
+      - description: "p = up arrow (was control-p)"
+        type: basic
+        from:
+          {
+            key_code: p,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+                optional: [any],
+              },
+          }
+        to: [{ key_code: up_arrow }]
+
+      - description: "t = control-t"
+        type: basic
+        from:
+          {
+            key_code: t,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+                optional: [any],
+              },
+          }
+        to: [{ key_code: t, modifiers: [left_control] }]
+
+      - description: "z = control-z"
+        type: basic
+        from:
+          {
+            key_code: z,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+                optional: [any],
+              },
+          }
+        to: [{ key_code: z, modifiers: [left_control] }]
+
+      ################################################################
+      #     Arrows with Shift / Option (Caps + left modifier)        #
+      ################################################################
+      # When a left-hand modifier is held with Caps, the first rule group
+      # turns Caps into right_control (not Hyper). These rules catch that
+      # state so Caps+Shift+F = Shift+Right (select), Caps+Option+F =
+      # Option+Right (word jump), Caps+Option+H = delete word, and so on.
+      # Only LEFT shift/option are allowed through, on purpose:
+      #  - no Command, so Caps+Cmd+F stays Ctrl+Cmd+F (full screen)
+      #  - no right-hand modifiers, so the Hyper and Tab(Meh) layers, which
+      #    are made of right-hand modifiers, never match these rules.
+
+      - description: "caps + shift/option + f = shift/option + right arrow"
+        type: basic
+        from:
+          {
+            key_code: f,
+            modifiers:
+              {
+                mandatory: [right_control],
+                optional: [left_shift, left_option, caps_lock],
+              },
+          }
+        to: [{ key_code: right_arrow }]
+
+      - description: "caps + shift/option + b = shift/option + left arrow"
+        type: basic
+        from:
+          {
+            key_code: b,
+            modifiers:
+              {
+                mandatory: [right_control],
+                optional: [left_shift, left_option, caps_lock],
+              },
+          }
+        to: [{ key_code: left_arrow }]
+
+      - description: "caps + shift/option + n = shift/option + down arrow"
+        type: basic
+        from:
+          {
+            key_code: n,
+            modifiers:
+              {
+                mandatory: [right_control],
+                optional: [left_shift, left_option, caps_lock],
+              },
+          }
+        to: [{ key_code: down_arrow }]
+
+      - description: "caps + shift/option + p = shift/option + up arrow"
+        type: basic
+        from:
+          {
+            key_code: p,
+            modifiers:
+              {
+                mandatory: [right_control],
+                optional: [left_shift, left_option, caps_lock],
+              },
+          }
+        to: [{ key_code: up_arrow }]
+
+      - description: "caps + shift/option + h = shift/option + backspace"
+        type: basic
+        from:
+          {
+            key_code: h,
+            modifiers:
+              {
+                mandatory: [right_control],
+                optional: [left_shift, left_option, caps_lock],
+              },
+          }
+        to: [{ key_code: delete_or_backspace }]
+
+  ################################################################
+  #                       Hyper Layer                            #
+  ################################################################
+  - description: "Hyper Layer"
+    manipulators:
+      - description: "Hyper + v = Paste and Match Style"
+        type: basic
+        from:
+          {
+            key_code: v,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to:
+          [{ key_code: v, modifiers: [left_option, left_shift, left_command] }]
+
+      - description: "Hyper + Delete = Forward Delete"
+        type: basic
+        from:
+          {
+            key_code: delete_or_backspace,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: delete_forward }]
+
+      - description: " [ = Prev space"
+        type: basic
+        from:
+          {
+            key_code: open_bracket,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: left_arrow, modifiers: [left_control] }]
+
+      - description: " ] = next space"
+        type: basic
+        from:
+          {
+            key_code: close_bracket,
+            modifiers:
+              {
+                mandatory:
+                  [right_command, right_control, right_shift, right_option],
+              },
+          }
+        to: [{ key_code: right_arrow, modifiers: [left_control] }]
+
+  ################################################################
+  #                    Escape to Greek                           #
+  ################################################################
+  - description: "Hyper(Control) Greek"
+    manipulators:
+      - description: "Right Option to Command-Command"
+        type: basic
+        from: { key_code: right_option }
+        to: [{ key_code: right_command, modifiers: [left_command] }]
+
+      #==========================================================#
+      # ( a ) --> alpha                                          #
+      #==========================================================#
+
+      - description: "alpha"
+        type: basic
+        from:
+          {
+            key_code: a,
+            modifiers: { mandatory: [right_command, left_command] },
+          }
+        to:
+          [
+            { shell_command: 'export LC_ALL=en_US.UTF-8; printf "α" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "alpha caps"
+        type: basic
+        from:
+          {
+            key_code: a,
+            modifiers: { mandatory: [right_command, left_command, shift] },
+          }
+        to:
+          [
+            { shell_command: 'export LC_ALL=en_US.UTF-8; printf "Α" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "alpha LaTeX"
+        type: basic
+        from:
+          {
+            key_code: a,
+            modifiers: { mandatory: [right_command, left_command, option] },
+          }
+        to:
+          [
+            { shell_command: 'printf "\\\alpha" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "alpha LaTeX caps"
+        type: basic
+        from:
+          {
+            key_code: a,
+            modifiers:
+              { mandatory: [right_command, left_command, shift, option] },
+          }
+        to:
+          [
+            { shell_command: 'printf "A" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      #==========================================================#
+      # ( b ) --> beta                                           #
+      #==========================================================#
+
+      - description: "beta"
+        type: basic
+        from:
+          {
+            key_code: b,
+            modifiers: { mandatory: [right_command, left_command] },
+          }
+        to:
+          [
+            { shell_command: 'export LC_ALL=en_US.UTF-8; printf "β" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "beta caps"
+        type: basic
+        from:
+          {
+            key_code: b,
+            modifiers: { mandatory: [right_command, left_command, shift] },
+          }
+        to:
+          [
+            { shell_command: 'export LC_ALL=en_US.UTF-8; printf "Β" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "beta LaTeX"
+        type: basic
+        from:
+          {
+            key_code: b,
+            modifiers: { mandatory: [right_command, left_command, option] },
+          }
+        to:
+          [
+            { shell_command: 'printf "\\\beta" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "beta LaTeX caps"
+        type: basic
+        from:
+          {
+            key_code: b,
+            modifiers:
+              { mandatory: [right_command, left_command, shift, option] },
+          }
+        to:
+          [
+            { shell_command: 'printf "B" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      #==========================================================#
+      # ( g ) --> gamma                                          #
+      #==========================================================#
+
+      - description: "gamma"
+        type: basic
+        from:
+          {
+            key_code: g,
+            modifiers: { mandatory: [right_command, left_command] },
+          }
+        to:
+          [
+            { shell_command: 'export LC_ALL=en_US.UTF-8; printf "γ" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "gamma caps"
+        type: basic
+        from:
+          {
+            key_code: g,
+            modifiers: { mandatory: [right_command, left_command, shift] },
+          }
+        to:
+          [
+            { shell_command: 'export LC_ALL=en_US.UTF-8; printf "Γ" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "gamma LaTeX"
+        type: basic
+        from:
+          {
+            key_code: g,
+            modifiers: { mandatory: [right_command, left_command, option] },
+          }
+        to:
+          [
+            { shell_command: 'printf "\\\gamma" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "gamma LaTeX caps"
+        type: basic
+        from:
+          {
+            key_code: g,
+            modifiers:
+              { mandatory: [right_command, left_command, shift, option] },
+          }
+        to:
+          [
+            { shell_command: 'printf "\\\Gamma" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      #==========================================================#
+      # ( d ) --> delta                                          #
+      #==========================================================#
+
+      - description: "delta"
+        type: basic
+        from:
+          {
+            key_code: d,
+            modifiers: { mandatory: [right_command, left_command] },
+          }
+        to:
+          [
+            { shell_command: 'export LC_ALL=en_US.UTF-8; printf "δ" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "delta caps"
+        type: basic
+        from:
+          {
+            key_code: d,
+            modifiers: { mandatory: [right_command, left_command, shift] },
+          }
+        to:
+          [
+            { shell_command: 'export LC_ALL=en_US.UTF-8; printf "Δ" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "delta LaTeX"
+        type: basic
+        from:
+          {
+            key_code: d,
+            modifiers: { mandatory: [right_command, left_command, option] },
+          }
+        to:
+          [
+            { shell_command: 'printf "\\\delta" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "delta LaTeX caps"
+        type: basic
+        from:
+          {
+            key_code: d,
+            modifiers:
+              { mandatory: [right_command, left_command, shift, option] },
+          }
+        to:
+          [
+            { shell_command: 'printf "\\\Delta" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      #==========================================================#
+      # ( e ) --> epsilon                                        #
+      #==========================================================#
+
+      - description: "epsilon"
+        type: basic
+        from:
+          {
+            key_code: e,
+            modifiers: { mandatory: [right_command, left_command] },
+          }
+        to:
+          [
+            { shell_command: 'export LC_ALL=en_US.UTF-8; printf "ε" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "epsilon caps"
+        type: basic
+        from:
+          {
+            key_code: e,
+            modifiers: { mandatory: [right_command, left_command, shift] },
+          }
+        to:
+          [
+            { shell_command: 'export LC_ALL=en_US.UTF-8; printf "E" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "epsilon LaTeX"
+        type: basic
+        from:
+          {
+            key_code: e,
+            modifiers: { mandatory: [right_command, left_command, option] },
+          }
+        to:
+          [
+            { shell_command: 'printf "\\\epsilon" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "epsilon LaTeX caps"
+        type: basic
+        from:
+          {
+            key_code: e,
+            modifiers:
+              { mandatory: [right_command, left_command, shift, option] },
+          }
+        to:
+          [
+            { shell_command: 'printf "E" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      #==========================================================#
+      # ( z ) --> zeta                                           #
+      #==========================================================#
+
+      - description: "zeta"
+        type: basic
+        from:
+          {
+            key_code: z,
+            modifiers: { mandatory: [right_command, left_command] },
+          }
+        to:
+          [
+            { shell_command: 'export LC_ALL=en_US.UTF-8; printf "ζ" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "zeta caps"
+        type: basic
+        from:
+          {
+            key_code: z,
+            modifiers: { mandatory: [right_command, left_command, shift] },
+          }
+        to:
+          [
+            { shell_command: 'export LC_ALL=en_US.UTF-8; printf "Z" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "zeta LaTeX"
+        type: basic
+        from:
+          {
+            key_code: z,
+            modifiers: { mandatory: [right_command, left_command, option] },
+          }
+        to:
+          [
+            { shell_command: 'printf "\\\zeta" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
+
+      - description: "zeta LaTeX caps"
+        type: basic
+        from:
+          {
+            key_code: z,
+            modifiers:
+              { mandatory: [right_command, left_command, shift, option] },
+          }
+        to:
+          [
+            { shell_command: 'printf "Z" | pbcopy' },
+            { key_code: vk_none, hold_down_milliseconds: 100 },
+            { key_code: v, modifiers: [left_command] },
+          ]
