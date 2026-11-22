@@ -14,17 +14,24 @@ rules:
   ################################################################
   #                 How this layout is built                     #
   ################################################################
-  # Holding Caps Lock sends RIGHT Control. Apps treat it exactly like the
-  # normal (left) Control key, so by default Caps + key = Control + key.
-  # Neither keyboard has a physical right Control key, so "right_control is
-  # down" reliably means "Caps is held", and the rules below key off it:
+  # Holding Caps Lock does two things:
+  #   1. sets the variable hyper_layer = 1 (cleared again on release)
+  #   2. holds RIGHT Control
+  # Apps treat right Control exactly like the normal (left) Control key, so by
+  # default Caps + key = Control + key (Caps+A = Ctrl+A, and so on).
+  # The Hyper Layer rules below need BOTH hyper_layer = 1 and right Control:
+  #   - the variable means "Caps is held", so a real right Control key on some
+  #     other keyboard never triggers the layer
+  #   - right Control is listed as "mandatory", which makes Karabiner remove it
+  #     from the output (Caps+F sends a plain right arrow, not Control+right)
   #   - Hyper Layer: arrows and editing  -> a few keys become arrows etc.
   #   - Hyper Layer: app and window keys -> listed keys send the Hyper chord
   #                                         (Cmd+Ctrl+Opt+Shift) for app shortcuts
   # The real Control key (MacBook) / Escape key (HHKB) sends LEFT control,
   # which no rule touches, so every native Control shortcut still exists there.
   #
-  # Three shared snippets (YAML anchors: "&name" defines, "*name" reuses):
+  # Four shared snippets (YAML anchors: "&name" defines, "*name" reuses):
+  #   &in_layer    condition: hyper_layer = 1 (Caps is held)
   #   &layer_only  Hyper Layer + key, nothing else held
   #   &layer_any   Hyper Layer + key, any other modifiers allowed and passed through
   #   &hyper       the four modifiers that make up the Hyper chord
@@ -37,14 +44,19 @@ rules:
       - description: "capslock = esc(click) | right control(hold)"
         type: basic
         from: { key_code: caps_lock, modifiers: { optional: [any] } }
-        to: [{ key_code: right_control }]
+        to:
+          [
+            { set_variable: { name: hyper_layer, value: 1 } },
+            { key_code: right_control },
+          ]
+        to_after_key_up: [{ set_variable: { name: hyper_layer, value: 0 } }]
         to_if_alone: [{ key_code: escape }]
 
   ################################################################
   #                    Tab to Meh                                #
   ################################################################
   # Meh = Control+Option+Shift. Built from LEFT-hand modifiers so it never
-  # looks like "Caps is held" (right_control) to the Hyper Layer rules.
+  # adds right_control, which the Hyper Layer rules need.
   - description: Tab to Meh
     manipulators:
       - description: "tab = tab(click) | meh(hold)"
@@ -158,31 +170,37 @@ rules:
             modifiers: &layer_any { mandatory: [right_control], optional: [any] },
           }
         to: [{ key_code: right_arrow }]
+        conditions: &in_layer [{ type: variable_if, name: hyper_layer, value: 1 }]
 
       - description: "caps + b = left arrow"
         type: basic
         from: { key_code: b, modifiers: *layer_any }
         to: [{ key_code: left_arrow }]
+        conditions: *in_layer
 
       - description: "caps + n = down arrow"
         type: basic
         from: { key_code: n, modifiers: *layer_any }
         to: [{ key_code: down_arrow }]
+        conditions: *in_layer
 
       - description: "caps + p = up arrow"
         type: basic
         from: { key_code: p, modifiers: *layer_any }
         to: [{ key_code: up_arrow }]
+        conditions: *in_layer
 
       - description: "caps + h = backspace"
         type: basic
         from: { key_code: h, modifiers: *layer_any }
         to: [{ key_code: delete_or_backspace }]
+        conditions: *in_layer
 
       - description: "caps + delete = forward delete"
         type: basic
         from: { key_code: delete_or_backspace, modifiers: *layer_any }
         to: [{ key_code: delete_forward }]
+        conditions: *in_layer
 
       # , and . are the < and > keys: start / end of document, like Emacs
       # M-< / M-> (also bound to Option+< / > in DefaultKeyBinding.dict).
@@ -193,11 +211,13 @@ rules:
         type: basic
         from: { key_code: comma, modifiers: *layer_any }
         to: [{ key_code: up_arrow, modifiers: [left_command] }]
+        conditions: *in_layer
 
       - description: "caps + . = end of document"
         type: basic
         from: { key_code: period, modifiers: *layer_any }
         to: [{ key_code: down_arrow, modifiers: [left_command] }]
+        conditions: *in_layer
 
       # The rest only fire with Caps and nothing else (*layer_only). Add another
       # modifier and they fall through as Control + that modifier + key.
@@ -210,21 +230,25 @@ rules:
               &layer_only { mandatory: [right_control], optional: [caps_lock] },
           }
         to: [{ key_code: v, modifiers: [left_option, left_shift, left_command] }]
+        conditions: *in_layer
 
       - description: "caps + [ = previous space"
         type: basic
         from: { key_code: open_bracket, modifiers: *layer_only }
         to: [{ key_code: left_arrow, modifiers: [left_control] }]
+        conditions: *in_layer
 
       - description: "caps + ] = next space"
         type: basic
         from: { key_code: close_bracket, modifiers: *layer_only }
         to: [{ key_code: right_arrow, modifiers: [left_control] }]
+        conditions: *in_layer
 
       - description: "caps + space = emoji picker"
         type: basic
         from: { key_code: spacebar, modifiers: *layer_only }
         to: [{ key_code: spacebar, modifiers: [left_control, left_command] }]
+        conditions: *in_layer
 
   ################################################################
   #              Hyper Layer: app and window keys                #
@@ -239,34 +263,34 @@ rules:
   # The trailing comment is the v3 design label, for reference only.
   - description: "Hyper Layer: app and window keys"
     manipulators:
-      - { description: "caps + ` = hyper + `", type: basic, from: { key_code: grave_accent_and_tilde, modifiers: *layer_only }, to: [{ key_code: grave_accent_and_tilde, modifiers: &hyper [right_command, right_control, right_option, right_shift] }] } # window: maximise
-      - { description: "caps + 1 = hyper + 1", type: basic, from: { key_code: "1", modifiers: *layer_only }, to: [{ key_code: "1", modifiers: *hyper }] } # window: quarter 1
-      - { description: "caps + 2 = hyper + 2", type: basic, from: { key_code: "2", modifiers: *layer_only }, to: [{ key_code: "2", modifiers: *hyper }] } # window: quarter 2
-      - { description: "caps + 3 = hyper + 3", type: basic, from: { key_code: "3", modifiers: *layer_only }, to: [{ key_code: "3", modifiers: *hyper }] } # window: quarter 3
-      - { description: "caps + 4 = hyper + 4", type: basic, from: { key_code: "4", modifiers: *layer_only }, to: [{ key_code: "4", modifiers: *hyper }] } # window: quarter 4
-      - { description: "caps + 5 = hyper + 5", type: basic, from: { key_code: "5", modifiers: *layer_only }, to: [{ key_code: "5", modifiers: *hyper }] } # window: half left
-      - { description: "caps + 6 = hyper + 6", type: basic, from: { key_code: "6", modifiers: *layer_only }, to: [{ key_code: "6", modifiers: *hyper }] } # window: half right
-      - { description: "caps + 7 = hyper + 7", type: basic, from: { key_code: "7", modifiers: *layer_only }, to: [{ key_code: "7", modifiers: *hyper }] } # window: half top
-      - { description: "caps + 8 = hyper + 8", type: basic, from: { key_code: "8", modifiers: *layer_only }, to: [{ key_code: "8", modifiers: *hyper }] } # window: half bottom
-      - { description: "caps + 9 = hyper + 9", type: basic, from: { key_code: "9", modifiers: *layer_only }, to: [{ key_code: "9", modifiers: *hyper }] } # window: reasonable size
-      - { description: "caps + 0 = hyper + 0", type: basic, from: { key_code: "0", modifiers: *layer_only }, to: [{ key_code: "0", modifiers: *hyper }] } # window: centre
-      - { description: "caps + - = hyper + -", type: basic, from: { key_code: hyphen, modifiers: *layer_only }, to: [{ key_code: hyphen, modifiers: *hyper }] } # clipboard popup
-      - { description: "caps + = = hyper + =", type: basic, from: { key_code: equal_sign, modifiers: *layer_only }, to: [{ key_code: equal_sign, modifiers: *hyper }] } # Access
-      - { description: "caps + \\ = hyper + \\", type: basic, from: { key_code: backslash, modifiers: *layer_only }, to: [{ key_code: backslash, modifiers: *hyper }] } # Passwords
-      - { description: "caps + q = hyper + q", type: basic, from: { key_code: q, modifiers: *layer_only }, to: [{ key_code: q, modifiers: *hyper }] } # BusyCal
-      - { description: "caps + w = hyper + w", type: basic, from: { key_code: w, modifiers: *layer_only }, to: [{ key_code: w, modifiers: *hyper }] } # Notes  (NB: Hyper+W is also macOS Wi-Fi diagnostics)
-      - { description: "caps + r = hyper + r", type: basic, from: { key_code: r, modifiers: *layer_only }, to: [{ key_code: r, modifiers: *hyper }] } # Reminders
-      - { description: "caps + y = hyper + y", type: basic, from: { key_code: y, modifiers: *layer_only }, to: [{ key_code: y, modifiers: *hyper }] } # iMessage
-      - { description: "caps + u = hyper + u", type: basic, from: { key_code: u, modifiers: *layer_only }, to: [{ key_code: u, modifiers: *hyper }] } # Music
-      - { description: "caps + i = hyper + i", type: basic, from: { key_code: i, modifiers: *layer_only }, to: [{ key_code: i, modifiers: *hyper }] } # Nova
-      - { description: "caps + s = hyper + s", type: basic, from: { key_code: s, modifiers: *layer_only }, to: [{ key_code: s, modifiers: *hyper }] } # Safari
-      - { description: "caps + g = hyper + g", type: basic, from: { key_code: g, modifiers: *layer_only }, to: [{ key_code: g, modifiers: *hyper }] } # Hookmark
-      - { description: "caps + j = hyper + j", type: basic, from: { key_code: j, modifiers: *layer_only }, to: [{ key_code: j, modifiers: *hyper }] } # FinBar
-      - { description: "caps + ; = hyper + ;", type: basic, from: { key_code: semicolon, modifiers: *layer_only }, to: [{ key_code: semicolon, modifiers: *hyper }] } # expand text
-      - { description: "caps + ' = hyper + '", type: basic, from: { key_code: quote, modifiers: *layer_only }, to: [{ key_code: quote, modifiers: *hyper }] } # AI chat
-      - { description: "caps + x = hyper + x", type: basic, from: { key_code: x, modifiers: *layer_only }, to: [{ key_code: x, modifiers: *hyper }] } # iTerm2
-      - { description: "caps + m = hyper + m", type: basic, from: { key_code: m, modifiers: *layer_only }, to: [{ key_code: m, modifiers: *hyper }] } # Mail
-      - { description: "caps + / = hyper + /", type: basic, from: { key_code: slash, modifiers: *layer_only }, to: [{ key_code: slash, modifiers: *hyper }] } # Finder
+      - { description: "caps + ` = hyper + `", type: basic, from: { key_code: grave_accent_and_tilde, modifiers: *layer_only }, to: [{ key_code: grave_accent_and_tilde, modifiers: &hyper [right_command, right_control, right_option, right_shift] }], conditions: *in_layer } # window: maximise
+      - { description: "caps + 1 = hyper + 1", type: basic, from: { key_code: "1", modifiers: *layer_only }, to: [{ key_code: "1", modifiers: *hyper }], conditions: *in_layer } # window: quarter 1
+      - { description: "caps + 2 = hyper + 2", type: basic, from: { key_code: "2", modifiers: *layer_only }, to: [{ key_code: "2", modifiers: *hyper }], conditions: *in_layer } # window: quarter 2
+      - { description: "caps + 3 = hyper + 3", type: basic, from: { key_code: "3", modifiers: *layer_only }, to: [{ key_code: "3", modifiers: *hyper }], conditions: *in_layer } # window: quarter 3
+      - { description: "caps + 4 = hyper + 4", type: basic, from: { key_code: "4", modifiers: *layer_only }, to: [{ key_code: "4", modifiers: *hyper }], conditions: *in_layer } # window: quarter 4
+      - { description: "caps + 5 = hyper + 5", type: basic, from: { key_code: "5", modifiers: *layer_only }, to: [{ key_code: "5", modifiers: *hyper }], conditions: *in_layer } # window: half left
+      - { description: "caps + 6 = hyper + 6", type: basic, from: { key_code: "6", modifiers: *layer_only }, to: [{ key_code: "6", modifiers: *hyper }], conditions: *in_layer } # window: half right
+      - { description: "caps + 7 = hyper + 7", type: basic, from: { key_code: "7", modifiers: *layer_only }, to: [{ key_code: "7", modifiers: *hyper }], conditions: *in_layer } # window: half top
+      - { description: "caps + 8 = hyper + 8", type: basic, from: { key_code: "8", modifiers: *layer_only }, to: [{ key_code: "8", modifiers: *hyper }], conditions: *in_layer } # window: half bottom
+      - { description: "caps + 9 = hyper + 9", type: basic, from: { key_code: "9", modifiers: *layer_only }, to: [{ key_code: "9", modifiers: *hyper }], conditions: *in_layer } # window: reasonable size
+      - { description: "caps + 0 = hyper + 0", type: basic, from: { key_code: "0", modifiers: *layer_only }, to: [{ key_code: "0", modifiers: *hyper }], conditions: *in_layer } # window: centre
+      - { description: "caps + - = hyper + -", type: basic, from: { key_code: hyphen, modifiers: *layer_only }, to: [{ key_code: hyphen, modifiers: *hyper }], conditions: *in_layer } # clipboard popup
+      - { description: "caps + = = hyper + =", type: basic, from: { key_code: equal_sign, modifiers: *layer_only }, to: [{ key_code: equal_sign, modifiers: *hyper }], conditions: *in_layer } # Access
+      - { description: "caps + \\ = hyper + \\", type: basic, from: { key_code: backslash, modifiers: *layer_only }, to: [{ key_code: backslash, modifiers: *hyper }], conditions: *in_layer } # Passwords
+      - { description: "caps + q = hyper + q", type: basic, from: { key_code: q, modifiers: *layer_only }, to: [{ key_code: q, modifiers: *hyper }], conditions: *in_layer } # BusyCal
+      - { description: "caps + w = hyper + w", type: basic, from: { key_code: w, modifiers: *layer_only }, to: [{ key_code: w, modifiers: *hyper }], conditions: *in_layer } # Notes  (NB: Hyper+W is also macOS Wi-Fi diagnostics)
+      - { description: "caps + r = hyper + r", type: basic, from: { key_code: r, modifiers: *layer_only }, to: [{ key_code: r, modifiers: *hyper }], conditions: *in_layer } # Reminders
+      - { description: "caps + y = hyper + y", type: basic, from: { key_code: y, modifiers: *layer_only }, to: [{ key_code: y, modifiers: *hyper }], conditions: *in_layer } # iMessage
+      - { description: "caps + u = hyper + u", type: basic, from: { key_code: u, modifiers: *layer_only }, to: [{ key_code: u, modifiers: *hyper }], conditions: *in_layer } # Music
+      - { description: "caps + i = hyper + i", type: basic, from: { key_code: i, modifiers: *layer_only }, to: [{ key_code: i, modifiers: *hyper }], conditions: *in_layer } # Nova
+      - { description: "caps + s = hyper + s", type: basic, from: { key_code: s, modifiers: *layer_only }, to: [{ key_code: s, modifiers: *hyper }], conditions: *in_layer } # Safari
+      - { description: "caps + g = hyper + g", type: basic, from: { key_code: g, modifiers: *layer_only }, to: [{ key_code: g, modifiers: *hyper }], conditions: *in_layer } # Hookmark
+      - { description: "caps + j = hyper + j", type: basic, from: { key_code: j, modifiers: *layer_only }, to: [{ key_code: j, modifiers: *hyper }], conditions: *in_layer } # FinBar
+      - { description: "caps + ; = hyper + ;", type: basic, from: { key_code: semicolon, modifiers: *layer_only }, to: [{ key_code: semicolon, modifiers: *hyper }], conditions: *in_layer } # expand text
+      - { description: "caps + ' = hyper + '", type: basic, from: { key_code: quote, modifiers: *layer_only }, to: [{ key_code: quote, modifiers: *hyper }], conditions: *in_layer } # AI chat
+      - { description: "caps + x = hyper + x", type: basic, from: { key_code: x, modifiers: *layer_only }, to: [{ key_code: x, modifiers: *hyper }], conditions: *in_layer } # iTerm2
+      - { description: "caps + m = hyper + m", type: basic, from: { key_code: m, modifiers: *layer_only }, to: [{ key_code: m, modifiers: *hyper }], conditions: *in_layer } # Mail
+      - { description: "caps + / = hyper + /", type: basic, from: { key_code: slash, modifiers: *layer_only }, to: [{ key_code: slash, modifiers: *hyper }], conditions: *in_layer } # Finder
 
   ################################################################
   #                    Escape to Greek                           #

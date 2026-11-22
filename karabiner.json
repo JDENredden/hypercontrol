@@ -22,7 +22,21 @@
                                 },
                                 "to": [
                                     {
+                                        "set_variable": {
+                                            "name": "hyper_layer",
+                                            "value": 1
+                                        }
+                                    },
+                                    {
                                         "key_code": "right_control"
+                                    }
+                                ],
+                                "to_after_key_up": [
+                                    {
+                                        "set_variable": {
+                                            "name": "hyper_layer",
+                                            "value": 0
+                                        }
                                     }
                                 ],
                                 "to_if_alone": [
@@ -284,6 +298,13 @@
                                     {
                                         "key_code": "right_arrow"
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -303,6 +324,13 @@
                                 "to": [
                                     {
                                         "key_code": "left_arrow"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -324,6 +352,13 @@
                                     {
                                         "key_code": "down_arrow"
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -343,6 +378,13 @@
                                 "to": [
                                     {
                                         "key_code": "up_arrow"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -364,6 +406,13 @@
                                     {
                                         "key_code": "delete_or_backspace"
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -383,6 +432,13 @@
                                 "to": [
                                     {
                                         "key_code": "delete_forward"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -407,6 +463,13 @@
                                             "left_command"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -429,6 +492,13 @@
                                         "modifiers": [
                                             "left_command"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -455,6 +525,13 @@
                                             "left_command"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -477,6 +554,13 @@
                                         "modifiers": [
                                             "left_control"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -501,6 +585,13 @@
                                             "left_control"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -524,6 +615,13 @@
                                             "left_control",
                                             "left_command"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             }
@@ -556,6 +654,13 @@
                                             "right_shift"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -581,6 +686,13 @@
                                             "right_option",
                                             "right_shift"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -608,6 +720,13 @@
                                             "right_shift"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -633,6 +752,13 @@
                                             "right_option",
                                             "right_shift"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -660,6 +786,13 @@
                                             "right_shift"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -685,6 +818,13 @@
                                             "right_option",
                                             "right_shift"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -712,6 +852,13 @@
                                             "right_shift"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -737,6 +884,13 @@
                                             "right_option",
                                             "right_shift"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -764,6 +918,13 @@
                                             "right_shift"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -789,6 +950,13 @@
                                             "right_option",
                                             "right_shift"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -816,6 +984,13 @@
                                             "right_shift"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -841,6 +1016,13 @@
                                             "right_option",
                                             "right_shift"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -868,6 +1050,13 @@
                                             "right_shift"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -893,6 +1082,13 @@
                                             "right_option",
                                             "right_shift"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -920,6 +1116,13 @@
                                             "right_shift"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -945,6 +1148,13 @@
                                             "right_option",
                                             "right_shift"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -972,6 +1182,13 @@
                                             "right_shift"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -997,6 +1214,13 @@
                                             "right_option",
                                             "right_shift"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -1024,6 +1248,13 @@
                                             "right_shift"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -1049,6 +1280,13 @@
                                             "right_option",
                                             "right_shift"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -1076,6 +1314,13 @@
                                             "right_shift"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -1101,6 +1346,13 @@
                                             "right_option",
                                             "right_shift"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -1128,6 +1380,13 @@
                                             "right_shift"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -1153,6 +1412,13 @@
                                             "right_option",
                                             "right_shift"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -1180,6 +1446,13 @@
                                             "right_shift"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -1205,6 +1478,13 @@
                                             "right_option",
                                             "right_shift"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             },
@@ -1232,6 +1512,13 @@
                                             "right_shift"
                                         ]
                                     }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
+                                    }
                                 ]
                             },
                             {
@@ -1257,6 +1544,13 @@
                                             "right_option",
                                             "right_shift"
                                         ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "variable_if",
+                                        "name": "hyper_layer",
+                                        "value": 1
                                     }
                                 ]
                             }
