@@ -22,7 +22,7 @@
 ;   Control = the bottom-left key  -> Windows sees Alt   (! in AutoHotkey)
 ;   Shift   = Shift                                      (+ in AutoHotkey)
 ;
-; HOW THE CAPS LAYER WORKS
+; HOW THE HYPER LAYER WORKS
 ;   The script tracks whether Caps Lock is held in the variable capsHeld.
 ;   The "#HotIf capsHeld" block below only applies while it is held.
 ;   Caps Lock's own on/off toggle is switched off permanently.
@@ -34,7 +34,7 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 SendMode("Input")
-InstallKeybdHook()                  ; needed for A_PriorKey and the Caps layer
+InstallKeybdHook()                  ; needed for A_PriorKey and the Hyper Layer
 SetCapsLockState("AlwaysOff")
 
 ; --- Timing (same idea as Karabiner's settings) -------------------------------
@@ -56,7 +56,7 @@ shiftDownAt := Map("LShift", 0, "RShift", 0)   ; 0 = not held
 
 
 ; =============================================================================
-;  Caps Lock: tap = Escape, hold = Caps layer
+;  Caps Lock: tap = Escape, hold = Hyper Layer
 ; =============================================================================
 *CapsLock:: {
     global capsHeld, capsDownAt
@@ -77,7 +77,7 @@ shiftDownAt := Map("LShift", 0, "RShift", 0)   ; 0 = not held
 
 
 ; =============================================================================
-;  Caps layer
+;  Hyper Layer
 ;  Keep this block ABOVE the others: when two conditional versions of a hotkey
 ;  both apply, AutoHotkey uses the one nearest the top of the file.
 ;  All hotkeys start with * so they also fire with other modifiers held.
@@ -212,7 +212,7 @@ shiftDownAt := Map("LShift", 0, "RShift", 0)   ; 0 = not held
 
 ; =============================================================================
 ;  Mac shortcuts (from mac.ahk, github.com/stevenilsen123/mac-keyboard-behavior-in-windows)
-;  Off while Caps is held, so they never compete with the Caps layer.
+;  Off while Caps is held, so they never compete with the Hyper Layer.
 ; =============================================================================
 #HotIf !capsHeld
 

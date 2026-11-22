@@ -18,9 +18,9 @@ rules:
   # normal (left) Control key, so by default Caps + key = Control + key.
   # Neither keyboard has a physical right Control key, so "right_control is
   # down" reliably means "Caps is held", and the rules below key off it:
-  #   - Caps Layer: arrows and editing  -> a few keys become arrows etc.
-  #   - Caps Layer: Hyper keys          -> listed keys send the Hyper chord
-  #                                        (Cmd+Ctrl+Opt+Shift) for app shortcuts
+  #   - Hyper Layer: arrows and editing  -> a few keys become arrows etc.
+  #   - Hyper Layer: app and window keys -> listed keys send the Hyper chord
+  #                                         (Cmd+Ctrl+Opt+Shift) for app shortcuts
   # The real Control key (MacBook) / Escape key (HHKB) sends LEFT control,
   # which no rule touches, so every native Control shortcut still exists there.
   #
@@ -44,7 +44,7 @@ rules:
   #                    Tab to Meh                                #
   ################################################################
   # Meh = Control+Option+Shift. Built from LEFT-hand modifiers so it never
-  # looks like "Caps is held" (right_control) to the Caps-layer rules.
+  # looks like "Caps is held" (right_control) to the Hyper Layer rules.
   - description: Tab to Meh
     manipulators:
       - description: "tab = tab(click) | meh(hold)"
@@ -139,9 +139,9 @@ rules:
         parameters: { basic.to_if_alone_timeout_milliseconds: 200 }
 
   ################################################################
-  #              Caps Layer: arrows and editing                  #
+  #              Hyper Layer: arrows and editing                 #
   ################################################################
-  - description: "Caps Layer: arrows and editing"
+  - description: "Hyper Layer: arrows and editing"
     manipulators:
       # f/b/n/p/h send real arrows / backspace (work everywhere, unlike the
       # Control+f/b/n/p/h text bindings). *caps_any passes every other held
@@ -227,7 +227,7 @@ rules:
         to: [{ key_code: spacebar, modifiers: [left_control, left_command] }]
 
   ################################################################
-  #                 Caps Layer: Hyper keys                       #
+  #              Hyper Layer: app and window keys                #
   ################################################################
   # Each key listed here sends Hyper+key (Cmd+Ctrl+Opt+Shift+key), the chord
   # you bind inside apps (launchers, window manager, ...).
@@ -237,7 +237,7 @@ rules:
   # A key NOT listed here is plain Control+key when pressed with Caps.
   # To add a shortcut key: copy one line and change both key_codes.
   # The trailing comment is the v3 design label, for reference only.
-  - description: "Caps Layer: Hyper keys"
+  - description: "Hyper Layer: app and window keys"
     manipulators:
       - { description: "caps + ` = hyper + `", type: basic, from: { key_code: grave_accent_and_tilde, modifiers: *caps_only }, to: [{ key_code: grave_accent_and_tilde, modifiers: &hyper [right_command, right_control, right_option, right_shift] }] } # window: maximise
       - { description: "caps + 1 = hyper + 1", type: basic, from: { key_code: "1", modifiers: *caps_only }, to: [{ key_code: "1", modifiers: *hyper }] } # window: quarter 1

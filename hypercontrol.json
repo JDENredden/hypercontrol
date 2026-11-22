@@ -270,7 +270,7 @@
       ]
     },
     {
-      "description": "Caps Layer: arrows and editing",
+      "description": "Hyper Layer: arrows and editing",
       "manipulators": [
         {
           "description": "caps + f = right arrow",
@@ -536,7 +536,7 @@
       ]
     },
     {
-      "description": "Caps Layer: Hyper keys",
+      "description": "Hyper Layer: app and window keys",
       "manipulators": [
         {
           "description": "caps + ` = hyper + `",

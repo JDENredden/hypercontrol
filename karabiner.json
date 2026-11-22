@@ -264,7 +264,7 @@
                         ]
                     },
                     {
-                        "description": "Caps Layer: arrows and editing",
+                        "description": "Hyper Layer: arrows and editing",
                         "manipulators": [
                             {
                                 "description": "caps + f = right arrow",
@@ -387,6 +387,52 @@
                                 ]
                             },
                             {
+                                "description": "caps + , = start of document",
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "comma",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "right_control"
+                                        ],
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "up_arrow",
+                                        "modifiers": [
+                                            "left_command"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "description": "caps + . = end of document",
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "period",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "right_control"
+                                        ],
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "down_arrow",
+                                        "modifiers": [
+                                            "left_command"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
                                 "description": "caps + v = paste and match style",
                                 "type": "basic",
                                 "from": {
@@ -484,7 +530,7 @@
                         ]
                     },
                     {
-                        "description": "Caps Layer: Hyper keys",
+                        "description": "Hyper Layer: app and window keys",
                         "manipulators": [
                             {
                                 "description": "caps + ` = hyper + `",
@@ -1179,58 +1225,6 @@
                                 "to": [
                                     {
                                         "key_code": "m",
-                                        "modifiers": [
-                                            "right_command",
-                                            "right_control",
-                                            "right_option",
-                                            "right_shift"
-                                        ]
-                                    }
-                                ]
-                            },
-                            {
-                                "description": "caps + , = hyper + ,",
-                                "type": "basic",
-                                "from": {
-                                    "key_code": "comma",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "right_control"
-                                        ],
-                                        "optional": [
-                                            "caps_lock"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "comma",
-                                        "modifiers": [
-                                            "right_command",
-                                            "right_control",
-                                            "right_option",
-                                            "right_shift"
-                                        ]
-                                    }
-                                ]
-                            },
-                            {
-                                "description": "caps + . = hyper + .",
-                                "type": "basic",
-                                "from": {
-                                    "key_code": "period",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "right_control"
-                                        ],
-                                        "optional": [
-                                            "caps_lock"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "period",
                                         "modifiers": [
                                             "right_command",
                                             "right_control",
