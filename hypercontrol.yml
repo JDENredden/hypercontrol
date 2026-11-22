@@ -184,6 +184,21 @@ rules:
         from: { key_code: delete_or_backspace, modifiers: *caps_any }
         to: [{ key_code: delete_forward }]
 
+      # , and . are the < and > keys: start / end of document, like Emacs
+      # M-< / M-> (also bound to Option+< / > in DefaultKeyBinding.dict).
+      # Caps+Shift+, / . selects to the start / end.
+      # (Bonus: Caps+. no longer sends Hyper+., which macOS treats as
+      # "run sysdiagnose".)
+      - description: "caps + , = start of document"
+        type: basic
+        from: { key_code: comma, modifiers: *caps_any }
+        to: [{ key_code: up_arrow, modifiers: [left_command] }]
+
+      - description: "caps + . = end of document"
+        type: basic
+        from: { key_code: period, modifiers: *caps_any }
+        to: [{ key_code: down_arrow, modifiers: [left_command] }]
+
       # The rest only fire with Caps and nothing else (*caps_only). Add another
       # modifier and they fall through as Control + that modifier + key.
       - description: "caps + v = paste and match style"
@@ -216,8 +231,9 @@ rules:
   ################################################################
   # Each key listed here sends Hyper+key (Cmd+Ctrl+Opt+Shift+key), the chord
   # you bind inside apps (launchers, window manager, ...).
-  # These are exactly the keys that passed through as Hyper before the
-  # restructure, so existing app bindings keep working.
+  # These are the keys that passed through as Hyper before the restructure
+  # (minus , and . which became document start/end), so existing app
+  # bindings keep working.
   # A key NOT listed here is plain Control+key when pressed with Caps.
   # To add a shortcut key: copy one line and change both key_codes.
   # The trailing comment is the v3 design label, for reference only.
@@ -250,8 +266,6 @@ rules:
       - { description: "caps + ' = hyper + '", type: basic, from: { key_code: quote, modifiers: *caps_only }, to: [{ key_code: quote, modifiers: *hyper }] } # AI chat
       - { description: "caps + x = hyper + x", type: basic, from: { key_code: x, modifiers: *caps_only }, to: [{ key_code: x, modifiers: *hyper }] } # iTerm2
       - { description: "caps + m = hyper + m", type: basic, from: { key_code: m, modifiers: *caps_only }, to: [{ key_code: m, modifiers: *hyper }] } # Mail
-      - { description: "caps + , = hyper + ,", type: basic, from: { key_code: comma, modifiers: *caps_only }, to: [{ key_code: comma, modifiers: *hyper }] } # (Home)
-      - { description: "caps + . = hyper + .", type: basic, from: { key_code: period, modifiers: *caps_only }, to: [{ key_code: period, modifiers: *hyper }] } # Select  (NB: Hyper+. is also macOS sysdiagnose)
       - { description: "caps + / = hyper + /", type: basic, from: { key_code: slash, modifiers: *caps_only }, to: [{ key_code: slash, modifiers: *hyper }] } # Finder
 
   ################################################################
