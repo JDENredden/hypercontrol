@@ -56,6 +56,18 @@
 [{c:"#DABECA",w:2.25},"{",{c:"#9CAFB7",a:5},"Z\nSTOP\n\n\n\n\nSIG",{c:"#FF928B"},"X\n\n\n\n\n\niTerm2",{c:"#9CAFB7"},"C\nINT\n\n\n\n\nSIG",{c:"#DABECA"},"V\nNoFMT\n\n\n\n\n(Paste)",{c:"#9CAFB7"},"B\nBack\n\n\n\n\nMove","N\nDown\n\n\n\n\nMove",{c:"#FF928B"},"M\nMail\n\n\n\n\n(Mail)",{c:"#E6B89C"},"<\n\n\n\n\n\n(Home)",">\n\n\n\n\n\nSelect",{c:"#FF928B"},"/\n\n\n\n\n\nFinder",{c:"#DABECA",a:7,w:1.75},"}",{c:"#cccccc"},""],
 [{x:1.5},"",{w:1.5},"",{w:7},"Emoji",{w:1.5},"",""]
 
+## HyperControl v4
+
+What changed from v3: holding Caps sends right Control, so any key not listed below is just Control + that key.
+Colours: purple = window (Hyper), red = apps (Hyper), tan = remapped by Karabiner (keeps Shift/Option/Command), blue = native Control passed through, pink = other remaps.
+Windows port: `windows/hypercontrol.ahk` (same layout; Caps+Z is a modifier diagnostic, C/L/T do nothing).
+
+[{c:"#E3D8F1",a:5},"`\nMax\n\n\n\n\n(Wndw)","1\nQ1\n\n\n\n\n(Wndw)","2\nQ2\n\n\n\n\n(Wndw)","3\nQ3\n\n\n\n\n(Wndw)","4\nQ4\n\n\n\n\n(Wndw)","5\nHL\n\n\n\n\n(Wndw)","6\nHR\n\n\n\n\n(Wndw)","7\nHT\n\n\n\n\n(Wndw)","8\nHB\n\n\n\n\n(Wndw)","9\nRsnble\n\n\n\n\n(Wndw)","0\nC\n\n\n\n\n(Wndw)",{c:"#FF928B"},"-\nClip\n\n\n\n\nPop","=\n\n\n\n\n\nAccess","\\\nwords\n\n\n\n\nPass",{c:"#cccccc"},"ESC\n\n\n\n\n\nControl"],
+[{a:7,w:1.5},"Meh",{c:"#FF928B",a:5},"Q\nBsyCal\n\n\n\n\n(Cal)","W\nNotes\n\n\n\n\n(Write)",{c:"#9CAFB7"},"E\nEnd\n\n\n\n\nLine",{c:"#FF928B"},"R\nders\n\n\n\n\nRemin",{c:"#9CAFB7"},"T\npose\n\n\n\n\nTrans",{c:"#FF928B"},"Y\niMess\n\n\n\n\n(Yarn)","U\nMusic\n\n\n\n\n(Music)","I\nNova\n\n\n\n\n(IDE)",{c:"#9CAFB7"},"O\nSplit\n\n\n\n\nLine",{c:"#E6B89C"},"P\n\n\n\n\n\n↑","[\nSpace\n\n\n\n\nPrev","]\nSpace\n\n\n\n\nNext",{a:7,w:1.5},"FwDel"],
+[{c:"#88D498",w:1.75},"Esc / Control",{c:"#9CAFB7",a:5},"A\nBegin\n\n\n\n\nLine",{c:"#FF928B"},"S\n\n\n\n\n\nSafari",{c:"#9CAFB7"},"D\nFwd\n\n\n\n\nDel",{c:"#E6B89C"},"F\n\n\n\n\n\n→",{c:"#FF928B"},"G\nmark\n\n\n\n\nHook-",{c:"#E6B89C"},"H\n\n\n\n\n\nBkspc",{c:"#FF928B"},"J\nBar\n\n\n\n\nFin",{c:"#9CAFB7"},"K\nDel\n\n\n\n\nLine","L\nCenter\n\n\n\n\nLine",{c:"#FF928B"},";\nExpand\n\n\n\n\nText","'\nChat\n\n\n\n\nAI",{c:"#cccccc",a:7,w:2.25},""],
+[{c:"#DABECA",w:2.25},"(",{c:"#9CAFB7",a:5},"Z\nSTOP\n\n\n\n\nSIG",{c:"#FF928B"},"X\n\n\n\n\n\niTerm2",{c:"#9CAFB7"},"C\nINT\n\n\n\n\nSIG",{c:"#DABECA"},"V\nNoFMT\n\n\n\n\n(Paste)",{c:"#E6B89C"},"B\n\n\n\n\n\n←","N\n\n\n\n\n\n↓",{c:"#FF928B"},"M\nMail\n\n\n\n\n(Mail)",{c:"#E6B89C"},"<\nStart\n\n\n\n\nDoc",">\nEnd\n\n\n\n\nDoc",{c:"#FF928B"},"/\n\n\n\n\n\nFinder",{c:"#DABECA",a:7,w:1.75},")",{c:"#cccccc"},""],
+[{x:1.5},"",{w:1.5},"",{w:7},"Emoji",{w:1.5},"",""]
+
 ## AltGr(eek)
 
 [{a:7},"","","","","","","","","","","","","","",""],
