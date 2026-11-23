@@ -211,6 +211,16 @@ shiftDownAt := Map("LShift", 0, "RShift", 0)   ; 0 = not held
 
 
 ; =============================================================================
+;  Outlook: Cmd+W closes the front window
+;  Outlook's pop-out windows (mail, calendar) ignore Ctrl+W. This closes the
+;  active window. New Outlook is olk.exe; classic Outlook is OUTLOOK.EXE.
+; =============================================================================
+#HotIf !capsHeld && (WinActive("ahk_exe olk.exe") || WinActive("ahk_exe OUTLOOK.EXE"))
+^w::WinClose("A")                   ; Cmd+W: close front window
+#HotIf
+
+
+; =============================================================================
 ;  Mac shortcuts (from mac.ahk, github.com/stevenilsen123/mac-keyboard-behavior-in-windows)
 ;  Off while Caps is held, so they never compete with the Hyper Layer.
 ; =============================================================================
